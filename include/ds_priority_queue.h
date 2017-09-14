@@ -28,9 +28,6 @@ typedef struct priorityqueue
 	size_t elementSize;
 }PriorityQueue;
 
-PriorityQueue *pq_head;
-PriorityQueue *pq_tail;
-
 /**
 * @brief Creates a new priority queue
 * @param elementSize

@@ -15,12 +15,17 @@ LL_Node * linkedlist_new_node()
 	return node;
 }
 
-void linkedlist_insert(LL_Node ** head, void * data)
+int linkedlist_insert(LL_Node ** head, void * data)
 {
 	LL_Node *node = linkedlist_new_node();
+	if (node == NULL)
+	{
+		return -1;
+	}
 	node->data = data;
 	node->next = (*head);
 	(*head) = node;
+	return 0;
 }
 
 LL_Node * linkedlist_remove_front(LL_Node ** head)
