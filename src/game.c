@@ -2,6 +2,8 @@
 #include "gf2d_graphics.h"
 #include "gf2d_sprite.h"
 #include "simple_logger.h"
+#include "ds_linked_list.h"
+#include "ds_priority_queue.h"
 
 int main(int argc, char * argv[])
 {
@@ -14,6 +16,9 @@ int main(int argc, char * argv[])
     float mf = 0;
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
+
+	//whee
+	PriorityQueue *pq;
     
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -29,10 +34,17 @@ int main(int argc, char * argv[])
     gf2d_graphics_set_frame_delay(16);
     gf2d_sprite_init(1024);
     SDL_ShowCursor(SDL_DISABLE);
-    
+
     /*demo setup*/
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
+
+	//my stuff
+	pq = pq_new(sizeof(int), 10);
+	pq_insert(pq, 5, 1);
+	pq_insert(pq, 10, 1);
+	pq_insert(pq, 7, 2);
+
     /*main game loop*/
     while(!done)
     {
@@ -62,7 +74,7 @@ int main(int argc, char * argv[])
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
         
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
-        slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
+        //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
     slog("---==== END ====---");
     return 0;
