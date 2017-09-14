@@ -49,8 +49,10 @@ int main(int argc, char * argv[])
 	ll_head = linkedlist_new_node();
 	linkedlist_insert(ll_head, 5);
 	linkedlist_insert(ll_head, 7);
-	slog("Popping (%i)", linkedlist_remove_front(ll_head)->data);
-	slog("Popping (%i)", linkedlist_remove_front(ll_head)->data);
+	while (ll_head->data != NULL)
+	{
+		slog("Popping (%i)", linkedlist_remove_back(ll_head)->data);
+	}
 
     /*main game loop*/
     while(!done)

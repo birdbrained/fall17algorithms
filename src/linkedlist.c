@@ -31,6 +31,28 @@ LL_Node * linkedlist_remove_front(LL_Node ** head)
 	return p;
 }
 
+LL_Node * linkedlist_remove_back(LL_Node ** head)
+{
+	LL_Node * p = (*head);
+	LL_Node * q = NULL;
+
+	if (p && p->next)
+	{
+		while (p->next->next != NULL)
+		{
+			p = p->next;
+		}
+		q = p->next;
+		p->next = NULL;
+	}
+	else
+	{
+		q = p;
+		(*head) = NULL;
+	}
+	return q;
+}
+
 int linkedlist_free_node(LL_Node *node)
 {
 	if (!node)
