@@ -4,6 +4,7 @@
 #include "simple_logger.h"
 #include "ds_linked_list.h"
 #include "ds_priority_queue.h"
+#include "linkedlist.h"
 
 int main(int argc, char * argv[])
 {
@@ -18,7 +19,8 @@ int main(int argc, char * argv[])
     Vector4D mouseColor = {255,100,255,200};
 
 	//whee
-	PriorityQueue *pq;
+	//PriorityQueue *pq;
+	LL_Node * ll_head = NULL;
     
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -40,10 +42,15 @@ int main(int argc, char * argv[])
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
 
 	//my stuff
-	pq = pq_new(sizeof(int), 10);
-	pq_insert(pq, 5, 1);
-	pq_insert(pq, 10, 1);
-	pq_insert(pq, 7, 2);
+	//pq = pq_new(sizeof(int), 10);
+	//pq_insert(pq, 5, 1);
+	//pq_insert(pq, 10, 1);
+	//pq_insert(pq, 7, 2);
+	ll_head = linkedlist_new_node();
+	linkedlist_insert(ll_head, 5);
+	linkedlist_insert(ll_head, 7);
+	slog("Popping (%i)", linkedlist_remove_front(ll_head)->data);
+	slog("Popping (%i)", linkedlist_remove_front(ll_head)->data);
 
     /*main game loop*/
     while(!done)
