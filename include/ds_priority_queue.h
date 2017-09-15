@@ -17,8 +17,8 @@ Node * pqDequeue(Node * pq);
 #include <SDL.h>
 
 /**
-* @brief A priority queue data structure
-*/
+ * @brief A priority queue data structure
+ */
 typedef struct priorityqueue
 {
 	void *data;
@@ -29,19 +29,22 @@ typedef struct priorityqueue
 }PriorityQueue;
 
 /**
-* @brief Creates a new priority queue
-* @param elementSize
-*/
+ * @brief Creates a new priority queue
+ * @param elementSize
+ */
 PriorityQueue *pq_new(size_t elementSize);
-void pq_delete(PriorityQueue *pq);
+void *pq_delete(PriorityQueue *pq);
 void *pq_delete_max(PriorityQueue *pq);
 
 /**
-* @brief Inserts a new node into the priority queue passed into the function
-* @param pq The priority queue node that will have a node inserted into it
-* @param data The data that will be inserted
-* @param priority The data's priority, larger numbers have greater priority
-*/
-void pq_insert(PriorityQueue *pq, void *data, int priority);
+ * @brief Inserts a new node into the priority queue passed into the function
+ * @param pq_head The head node that will have a node inserted into it
+ * @param pq_tail The tail node, required if inserting first node
+ * @param data The data that will be inserted
+ * @param elementSize Size of the data
+ * @param priority The data's priority, larger numbers have greater priority
+ * @returns 0 if successful, -1 if data could not be allocated
+ */
+int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, size_t elementSize, int priority);
 
 #endif // !__DS_PRIORITY_QUEUE__

@@ -46,6 +46,7 @@ Node * pqDequeue(Node * pq)
 
 #include <SDL.h>
 #include "ds_priority_queue.h"
+#include "simple_logger.h"
 
 PriorityQueue * pq_new(size_t elementSize)
 {
@@ -58,43 +59,60 @@ PriorityQueue * pq_new(size_t elementSize)
 
 	int i;
 	PriorityQueue *pq;
-	pq = malloc(sizeof(PriorityQueue));
-	pq->data = NULL;
+	pq = (PriorityQueue *)malloc(sizeof(PriorityQueue) + elementSize);
+	if (pq == NULL)
+	{
+		slog("Error: could not allocate memory for new pq node");
+		return NULL;
+	}
+	memset(pq, 0, sizeof(PriorityQueue) + elementSize);
 	pq->elementSize = elementSize;
-	pq->next = NULL;
-	pq->prev = NULL;
-	pq->priority = 0;
 	return pq;
 }
 
-void pq_delete(PriorityQueue *pq)
+void * pq_delete(PriorityQueue ** pq_head, PriorityQueue ** pq_tail)
 {
-	return NULL;
+	PriorityQueue * temp = NULL;
+
+	temp = (*pq_tail);
+	(*pq_tail) = (*pq_tail)->next;
+	(*pq_tail)->prev = NULL;
+	temp->next = NULL;
+
+	return temp->data;
 }
 
-void *pq_delete_max(PriorityQueue *pq)
+void * pq_delete_max(PriorityQueue ** pq_head)
 {
-	int currentMaxPriority, currentMaxIndex, i;
-	currentMaxPriority = -1;
-	currentMaxIndex = 0;
-	i = 0;
+	PriorityQueue * maxPriorityNode = NULL;
 
-	while (pq[i].data != NULL)
+
+}
+
+int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, size_t elementSize, int priority)
+{
+	PriorityQueue * n = pq_new(elementSize);
+
+	if (n == NULL)
 	{
-		if (pq[i].priority > currentMaxPriority)
-		{
-			currentMaxPriority = pq[i].priority;
-			currentMaxIndex = i;
-		}
-		i++;
+		return -1;
 	}
-}
+	n->data = data;
+	n->elementSize = elementSize;
+	n->priority = priority;
 
-void pq_insert(PriorityQueue *pq, void *data, int priority)
-{
 	//If the priority queue doesn't have anything in it yet
-	if (pq->data == NULL)
+	if ((*pq_head)->data == NULL)
 	{
-
+		(*pq_head) = n;
+		(*pq_tail) = n;
 	}
+	//But if it already does, enqueue something and change the head pointer to new node
+	else
+	{
+		n->prev = (*pq_head);
+		(*pq_head)->next = n;
+		(*pq_head) = n;
+	}
+	return 0;
 }
