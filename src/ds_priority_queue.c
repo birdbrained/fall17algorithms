@@ -73,20 +73,88 @@ PriorityQueue * pq_new(size_t elementSize)
 void * pq_delete(PriorityQueue ** pq_head, PriorityQueue ** pq_tail)
 {
 	PriorityQueue * temp = NULL;
+	void * endData = NULL;
 
-	temp = (*pq_tail);
-	(*pq_tail) = (*pq_tail)->next;
-	(*pq_tail)->prev = NULL;
-	temp->next = NULL;
+	if ((*pq_head) == NULL)
+	{
+		slog("Error: cannot delete from an empty priority queue!");
+		return NULL;
+	}
+	else if ((*pq_head) == (*pq_tail))
+	{
+		temp = (*pq_tail);
+		(*pq_head) = NULL;
+		(*pq_tail) = NULL;
+	}
+	else
+	{
+		temp = (*pq_tail);
+		(*pq_tail) = (*pq_tail)->next;
+		(*pq_tail)->prev = NULL;
+		temp->next = NULL;
+	}
 
-	return temp->data;
+	endData = temp->data;
+	temp->data = NULL;
+	pq_free_node(temp);
+	return endData;
 }
 
-void * pq_delete_max(PriorityQueue ** pq_head)
+void * pq_delete_max(PriorityQueue ** pq_head, PriorityQueue ** pq_tail)
 {
 	PriorityQueue * maxPriorityNode = NULL;
+	int currMaxPriority = -1;
+	PriorityQueue * temp = (*pq_tail);
+	void * endData = NULL;
 
+	if ((*pq_head) == NULL)
+	{
+		slog("Error: cannot delete max from an empty priority queue!");
+		return NULL;
+	}
+	else if ((*pq_head) == (*pq_tail))
+	{
+		maxPriorityNode = (*pq_tail);
+		(*pq_head) = NULL;
+		(*pq_tail) = NULL;
+	}
+	else
+	{
+		while (temp != NULL)
+		{
+			if (temp->priority > currMaxPriority)
+			{
+				currMaxPriority = temp->priority;
+				maxPriorityNode = temp;
+			}
+			temp = temp->next;
+		}
+		if (maxPriorityNode == (*pq_tail))
+		{
+			maxPriorityNode->next->prev = NULL;
+			(*pq_tail) = maxPriorityNode->next;
+			maxPriorityNode->next = NULL;
+		}
+		else if (maxPriorityNode == (*pq_head))
+		{
+			maxPriorityNode->prev->next = NULL;
+			(*pq_head) = maxPriorityNode->prev;
+			maxPriorityNode->prev = NULL;
 
+		}
+		else
+		{
+			maxPriorityNode->prev->next = maxPriorityNode->next;
+			maxPriorityNode->next->prev = maxPriorityNode->prev;
+			maxPriorityNode->next = NULL;
+			maxPriorityNode->prev = NULL;
+		}
+	}
+
+	endData = maxPriorityNode->data;
+	maxPriorityNode->data = NULL;
+	pq_free_node(maxPriorityNode);
+	return endData;
 }
 
 int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, size_t elementSize, int priority)
@@ -102,7 +170,7 @@ int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, si
 	n->priority = priority;
 
 	//If the priority queue doesn't have anything in it yet
-	if ((*pq_head)->data == NULL)
+	if ((*pq_head) == NULL)
 	{
 		(*pq_head) = n;
 		(*pq_tail) = n;
@@ -114,5 +182,21 @@ int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, si
 		(*pq_head)->next = n;
 		(*pq_head) = n;
 	}
+	return 0;
+}
+
+int pq_free_node(PriorityQueue * node)
+{
+	if (!node)
+	{
+		slog("Error: trying to free node that is already NULL");
+		return -2;
+	}
+	if (node->data != NULL)
+	{
+		slog("Error: data still present in node");
+		return -1;
+	}
+	free(node);
 	return 0;
 }

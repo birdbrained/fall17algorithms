@@ -32,9 +32,9 @@ typedef struct priorityqueue
  * @brief Creates a new priority queue
  * @param elementSize
  */
-PriorityQueue *pq_new(size_t elementSize);
-void *pq_delete(PriorityQueue *pq);
-void *pq_delete_max(PriorityQueue *pq);
+PriorityQueue * pq_new(size_t elementSize);
+void * pq_delete(PriorityQueue ** pq_head, PriorityQueue ** pq_tail);
+void * pq_delete_max(PriorityQueue ** pq_head, PriorityQueue ** pq_tail);
 
 /**
  * @brief Inserts a new node into the priority queue passed into the function

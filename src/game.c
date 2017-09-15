@@ -19,8 +19,10 @@ int main(int argc, char * argv[])
     Vector4D mouseColor = {255,100,255,200};
 
 	//whee
-	//PriorityQueue *pq;
-	LL_Node * ll_head = NULL;
+	PriorityQueue *pq_head = NULL;
+	PriorityQueue *pq_tail = NULL;
+	int p = 0;
+	//LL_Node * ll_head = NULL;
     
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -42,7 +44,7 @@ int main(int argc, char * argv[])
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
 
 	//my stuff
-	//pq = pq_new(sizeof(int), 10);
+	/*pq = pq_new(sizeof(int), 10);
 	//pq_insert(pq, 5, 1);
 	//pq_insert(pq, 10, 1);
 	//pq_insert(pq, 7, 2);
@@ -52,6 +54,23 @@ int main(int argc, char * argv[])
 	while (ll_head->data != NULL)
 	{
 		slog("Popping (%i)", linkedlist_remove_back(ll_head)->data);
+	}*/
+
+	//pq!
+	pq_head = pq_new(sizeof(int));
+	pq_tail = pq_new(sizeof(int));
+	pq_insert(pq_head, pq_tail, 5, sizeof(int), 1);
+	pq_insert(pq_head, pq_tail, 6, sizeof(int), 1);
+	pq_insert(pq_head, pq_tail, 7, sizeof(int), 3);
+	pq_insert(pq_head, pq_tail, 9, sizeof(int), 2);
+	while (pq_head != NULL)
+	{
+		p = pq_delete_max(pq_head, pq_tail);
+		if (p == NULL)
+		{
+			break;
+		}
+		slog("Removing (%d) from pq", p);
 	}
 
     /*main game loop*/
