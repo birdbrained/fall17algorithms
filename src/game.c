@@ -155,7 +155,7 @@ int main(int argc, char * argv[])
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
-			draw_stack(brick, vector2d(600, 700), bricklist, 10);
+			draw_stack(brick, vector2d(600, 700), bricklist, sizeof(bricklist) / sizeof(Brick));
             
             //UI elements last
             gf2d_sprite_draw(
