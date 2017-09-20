@@ -201,11 +201,6 @@ int pq_free_node(PriorityQueue * node)
 	return 0;
 }
 
-void pq_to_array(PriorityQueue ** pq_head, PriorityQueue ** pq_tail)
-{
-
-}
-
 int pq_length(PriorityQueue ** pq_tail)
 {
 	int length = 0;
