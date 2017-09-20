@@ -48,6 +48,27 @@ Node * pqDequeue(Node * pq)
 #include "ds_priority_queue.h"
 #include "simple_logger.h"
 
+/**
+ * @brief Called by pq_delete, frees memory associated with a dataless node
+ * @param node The node to free
+ * @returns -2 if node is NULL, -1 if data still in node, 0 if successful
+ */
+int pq_free_node(PriorityQueue * node)
+{
+	if (!node)
+	{
+		slog("Error: trying to free node that is already NULL");
+		return -2;
+	}
+	if (node->data != NULL)
+	{
+		slog("Error: data still present in node");
+		return -1;
+	}
+	free(node);
+	return 0;
+}
+
 PriorityQueue * pq_new(size_t elementSize)
 {
 	/*PriorityQueue *head = NULL;
@@ -167,6 +188,10 @@ int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, si
 	}
 	n->data = data;
 	n->elementSize = elementSize;
+	if (priority < 0)
+	{
+		priority = 0;
+	}
 	n->priority = priority;
 
 	//If the priority queue doesn't have anything in it yet
@@ -182,22 +207,6 @@ int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, si
 		(*pq_head)->next = n;
 		(*pq_head) = n;
 	}
-	return 0;
-}
-
-int pq_free_node(PriorityQueue * node)
-{
-	if (!node)
-	{
-		slog("Error: trying to free node that is already NULL");
-		return -2;
-	}
-	if (node->data != NULL)
-	{
-		slog("Error: data still present in node");
-		return -1;
-	}
-	free(node);
 	return 0;
 }
 
