@@ -17,8 +17,16 @@ void draw_stack(Sprite *brick, Vector2D start, Brick *bricklist, unsigned int co
 	int brickheight = 32;
 	int brickwidth = 32;
 	Vector2D drawPosition;
-	if (!brick)return;
-	if (!bricklist)return;
+	if (!brick)
+	{
+		slog("Error loading brick texture");
+		return;
+	}
+	if (!bricklist)
+	{
+		slog("Invalid bricklist pointer");
+		return;
+	}
 	for (i = 0; i < count; i++)
 	{
 		//vertical draw
@@ -112,6 +120,7 @@ int main(int argc, char * argv[])
 	pq_insert(pq_head, pq_tail, 6, sizeof(int), 1);
 	pq_insert(pq_head, pq_tail, 7, sizeof(int), 3);
 	pq_insert(pq_head, pq_tail, 9, sizeof(int), 2);
+	slog("Length of my queue is (%i)", pq_length(pq_tail));
 	while (pq_head != NULL)
 	{
 		p = pq_delete_max(pq_head, pq_tail);

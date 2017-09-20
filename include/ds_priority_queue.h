@@ -47,4 +47,11 @@ void * pq_delete_max(PriorityQueue ** pq_head, PriorityQueue ** pq_tail);
  */
 int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, size_t elementSize, int priority);
 
+/**
+ * @brief Gets the length of the Priority Queue
+ * @param pq_tail Pointer to the tail (first element added to pq)
+ * @returns Length of priority queue, 0 if no elements in queue
+ */
+int pq_length(PriorityQueue ** pq_tail);
+
 #endif // !__DS_PRIORITY_QUEUE__
