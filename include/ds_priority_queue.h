@@ -21,23 +21,37 @@ Node * pqDequeue(Node * pq);
  */
 typedef struct priorityqueue
 {
-	void *data;
-	int priority;
-	struct priorityqueue * next;
-	struct priorityqueue * prev;
-	size_t elementSize;
+	void *data;						/**<The data the node will hold*/
+	int priority;					/**<Positive or zero, negative numbers will become zero*/
+	struct priorityqueue * next;	/**<The next node in the pq*/
+	struct priorityqueue * prev;	/**<The previous node in the pq*/
+	size_t elementSize;				/**<Size of the data*/
 }PriorityQueue;
 
 /**
  * @brief Creates a new priority queue
- * @param elementSize
+ * @param elementSize The size of the data the pq will hold
  */
 PriorityQueue * pq_new(size_t elementSize);
+
+/**
+ * @brief Dequeues the first (oldest) element in the pq
+ * @param pq_head Head node of pq (most recent in)
+ * @param pq_tail Tail node of pq (first in)
+ * @returns The data that the first-in node holds
+ */
 void * pq_delete(PriorityQueue ** pq_head, PriorityQueue ** pq_tail);
+
+/**
+* @brief Dequeues the element in the pq with the highest priority
+* @param pq_head Head node of pq (most recent in)
+* @param pq_tail Tail node of pq (first in)
+* @returns The data within the highest priority node
+*/
 void * pq_delete_max(PriorityQueue ** pq_head, PriorityQueue ** pq_tail);
 
 /**
- * @brief Inserts a new node into the priority queue passed into the function
+ * @brief Inserts a new node into the priority queue, tail points to first in, head points to most recently added
  * @param pq_head The head node that will have a node inserted into it
  * @param pq_tail The tail node, required if inserting first node
  * @param data The data that will be inserted

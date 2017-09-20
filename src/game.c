@@ -78,6 +78,7 @@ int main(int argc, char * argv[])
 	PriorityQueue *pq_head = NULL;
 	PriorityQueue *pq_tail = NULL;
 	int p = 0;
+	int i = 0;
 	//LL_Node * ll_head = NULL;
     
     /*program initializtion*/
@@ -116,12 +117,18 @@ int main(int argc, char * argv[])
 	//pq!
 	pq_head = pq_new(sizeof(int));
 	pq_tail = pq_new(sizeof(int));
+	/*
 	pq_insert(pq_head, pq_tail, 5, sizeof(int), 1);
 	pq_insert(pq_head, pq_tail, 6, sizeof(int), 1);
 	pq_insert(pq_head, pq_tail, 7, sizeof(int), 3);
 	pq_insert(pq_head, pq_tail, 9, sizeof(int), 2);
+	*/
+	for (i = 0; i < sizeof(bricklist) / sizeof(Brick); i++)
+	{
+		pq_insert(pq_head, pq_tail, bricklist[i].width, sizeof(Brick), bricklist[i].width);
+	}
 	slog("Length of my queue is (%i)", pq_length(pq_tail));
-	while (pq_head != NULL)
+	for (i = 0; i < sizeof(bricklist) / sizeof(Brick); i++)
 	{
 		p = pq_delete_max(pq_head, pq_tail);
 		if (p == NULL)
@@ -129,6 +136,7 @@ int main(int argc, char * argv[])
 			break;
 		}
 		slog("Removing (%d) from pq", p);
+		bricklist[i].width = p;
 	}
 
     /*main game loop*/
