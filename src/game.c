@@ -6,79 +6,18 @@
 #include "ds_priority_queue.h"
 #include "linkedlist.h"
 
-typedef struct
-{
-	int width;
-}Brick;
-
-void draw_stack(Sprite *brick, Vector2D start, Brick *bricklist, unsigned int count)
-{
-	unsigned int i, j;
-	int brickheight = 32;
-	int brickwidth = 32;
-	Vector2D drawPosition;
-	if (!brick)
-	{
-		slog("Error loading brick texture");
-		return;
-	}
-	if (!bricklist)
-	{
-		slog("Invalid bricklist pointer");
-		return;
-	}
-	for (i = 0; i < count; i++)
-	{
-		//vertical draw
-		drawPosition.x = start.x - ((bricklist[i].width * brickwidth) / 2);
-		drawPosition.y = start.y - ((i + 1) * brickheight);
-		for (j = 0;j < bricklist[i].width;j++)
-		{
-			//horizontal draw
-			drawPosition.x += brickwidth;
-			gf2d_sprite_draw(
-				brick,
-				drawPosition,
-				NULL,
-				NULL,
-				NULL,
-				NULL,
-				NULL,
-				0);
-		}
-	}
-}
 
 int main(int argc, char * argv[])
 {
     /*variable declarations*/
     int done = 0;
     const Uint8 * keys;
-    Sprite *sprite, *brick;
-	static Brick bricklist[] =
-	{
-		{2},
-		{7},
-		{1},
-		{5},
-		{14},
-		{9},
-		{13},
-		{24},
-		{16},
-		{22}
-	};
+	Sprite *sprite;
     
     int mx,my;
     float mf = 0;
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
-
-	//whee
-	PriorityQueue *pq_head = NULL;
-	PriorityQueue *pq_tail = NULL;
-	int p = 0;
-	//LL_Node * ll_head = NULL;
     
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -97,7 +36,6 @@ int main(int argc, char * argv[])
 
     /*demo setup*/
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
-	brick = gf2d_sprite_load_all("images/brick.png",32,32,16);
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
 
 	//my stuff
@@ -112,24 +50,6 @@ int main(int argc, char * argv[])
 	{
 		slog("Popping (%i)", linkedlist_remove_back(ll_head)->data);
 	}*/
-
-	//pq!
-	pq_head = pq_new(sizeof(int));
-	pq_tail = pq_new(sizeof(int));
-	pq_insert(pq_head, pq_tail, 5, sizeof(int), 1);
-	pq_insert(pq_head, pq_tail, 6, sizeof(int), 1);
-	pq_insert(pq_head, pq_tail, 7, sizeof(int), 3);
-	pq_insert(pq_head, pq_tail, 9, sizeof(int), 2);
-	slog("Length of my queue is (%i)", pq_length(pq_tail));
-	while (pq_head != NULL)
-	{
-		p = pq_delete_max(pq_head, pq_tail);
-		if (p == NULL)
-		{
-			break;
-		}
-		slog("Removing (%d) from pq", p);
-	}
 
     /*main game loop*/
     while(!done)
@@ -146,8 +66,6 @@ int main(int argc, char * argv[])
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
-
-			draw_stack(brick, vector2d(600, 700), bricklist, 10);
             
             //UI elements last
             gf2d_sprite_draw(

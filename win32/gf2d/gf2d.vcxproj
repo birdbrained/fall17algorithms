@@ -93,8 +93,10 @@
     <ClCompile Include="..\..\src\simple_logger.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\ds_graph.h" />
     <ClInclude Include="..\..\include\ds_linked_list.h" />
     <ClInclude Include="..\..\include\ds_priority_queue.h" />
+    <ClInclude Include="..\..\include\dungeon.h" />
     <ClInclude Include="..\..\include\gf2d_draw.h" />
     <ClInclude Include="..\..\include\gf2d_graphics.h" />
     <ClInclude Include="..\..\include\gf2d_sprite.h" />
