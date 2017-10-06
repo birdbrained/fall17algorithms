@@ -15,7 +15,7 @@ int main(int argc, char * argv[])
     const Uint8 * keys;
 	Sprite *sprite;
 	TileMap *map;
-	static Vector2D path[2];
+	static Vector2D path[3];
     
     int mx,my;
     float mf = 0;
@@ -43,7 +43,8 @@ int main(int argc, char * argv[])
 
 	map = tilemap_load("levels/tilemap.map");
 	vector2d_copy(path[0], map->start);
-	vector2d_copy(path[1], map->end);
+	vector2d_copy(path[1], vector2d(10, 10));
+	vector2d_copy(path[2], map->end);
 
 	//my stuff
 	/*pq = pq_new(sizeof(int), 10);
@@ -75,7 +76,7 @@ int main(int argc, char * argv[])
 		gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
 		tilemap_draw(map, vector2d(86, 24));
-		tilemap_draw_path(path, 2, map, vector2d(86, 24));
+		tilemap_draw_path(path, 3, map, vector2d(86, 24));
 
 		//UI elements last
 		gf2d_sprite_draw(

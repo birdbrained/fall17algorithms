@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\dj_tilemap.c" />
+    <ClCompile Include="..\..\src\ds_graph.c" />
     <ClCompile Include="..\..\src\ds_linked_list.c" />
     <ClCompile Include="..\..\src\ds_priority_queue.c" />
     <ClCompile Include="..\..\src\game.c" />
