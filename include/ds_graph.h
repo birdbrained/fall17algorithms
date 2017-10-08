@@ -1,6 +1,8 @@
 #ifndef __DS_GRAPH__
 #define __DS_GRAPH__
 
+#define MAX_WIDTH 100
+
 #include <stdlib.h>
 #include "simple_logger.h"
 
@@ -19,12 +21,42 @@ typedef struct graphnode_s
 	size_t elementSize;					/**<size of the data*/
 }GraphNode;
 
+typedef struct graph_s
+{
+	GraphNode * head;					/**<pointer to start of graph*/
+	GraphNode * tail;					/**<pointer to most recently added node, aka the end*/
+	int width;							/**<how wide a row should be before moving to the next*/
+	GraphNode * prevRow[MAX_WIDTH];		/**<used for linking up and down node pointers*/
+}Graph;
+
 /**
  * @brief Creates a new graph node
  * @param elementSize Size of the data to hold
  * @returns Pointer to new GraphNode; NULL if could not allocate memory
  */
 GraphNode * graph_new(size_t elementSize);
-int graph_insert(GraphNode ** start, void * data, size_t elementSize, int width);
+
+/**
+* @brief Initializes a new graph
+* @param width Max number of nodes in a single row
+* @param elementSize Size of data each node will hold
+* @returns Pointer to new Graph; NULL if could not allocate memory
+*/
+Graph * graph_init(int width, size_t elementSize);
+
+/**
+ * @brief Inserts a new graph node into the graph
+ * @param graph The graph to insert into
+ * @param data The data to insert
+ * @param elementSize Size of data the node will hold
+ * @returns -1 if could not allocate memory; 0 if successful
+ */
+int graph_insert(Graph ** graph, void * data, int width, size_t elementSize, GraphNode *prevRow[MAX_WIDTH]);
+
+/**
+ * @brief Simple slog of data in graph
+ * @param graph The graph to print data from
+ */
+void graph_print(Graph ** graph);
 
 #endif // !__DS_GRAPH__

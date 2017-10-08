@@ -4,6 +4,7 @@
 #include "simple_logger.h"
 #include "ds_linked_list.h"
 #include "ds_priority_queue.h"
+#include "ds_graph.h"
 #include "linkedlist.h"
 #include "dj_tilemap.h"
 
@@ -21,6 +22,10 @@ int main(int argc, char * argv[])
     float mf = 0;
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
+
+	//Assignment variables
+	Graph *myGraph = graph_init(4, sizeof(int));
+	int i = 0;
     
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -46,18 +51,26 @@ int main(int argc, char * argv[])
 	vector2d_copy(path[1], vector2d(10, 10));
 	vector2d_copy(path[2], map->end);
 
-	//my stuff
-	/*pq = pq_new(sizeof(int), 10);
-	//pq_insert(pq, 5, 1);
-	//pq_insert(pq, 10, 1);
-	//pq_insert(pq, 7, 2);
-	ll_head = linkedlist_new_node();
-	linkedlist_insert(ll_head, 5);
-	linkedlist_insert(ll_head, 7);
-	while (ll_head->data != NULL)
+	//my stuff for assignment
+	if (myGraph != NULL)
 	{
-		slog("Popping (%i)", linkedlist_remove_back(ll_head)->data);
-	}*/
+		//myGraph->head = graph_new(sizeof(int));
+		//myGraph->tail = graph_new(sizeof(int));
+		//myGraph->width = 4;
+		//graph_insert(myGraph, 0, myGraph->width, sizeof(int), myGraph->prevRow);
+		//graph_insert(myGraph, 1, myGraph->width, sizeof(int), myGraph->prevRow);
+		//graph_insert(myGraph, 2, myGraph->width, sizeof(int), myGraph->prevRow);
+		//graph_insert(myGraph, 3, myGraph->width, sizeof(int), myGraph->prevRow);
+		//graph_insert(myGraph, 4, myGraph->width, sizeof(int), myGraph->prevRow);
+		//graph_insert(myGraph, 5, myGraph->width, sizeof(int), myGraph->prevRow);
+		for (i = 0; i < 16; i++)
+		{
+			graph_insert(myGraph, i, myGraph->width, sizeof(int), myGraph->prevRow);
+		}
+		graph_print(myGraph);
+		//slog("down data from start (%i)", myGraph->head->down_node->data);
+		//slog("width: (%i)", myGraph->width);
+	}
 
     /*main game loop*/
     while(!done)
