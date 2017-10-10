@@ -40,9 +40,10 @@ Graph * graph_init(int width, size_t elementSize)
 	return grape;
 }
 
-int graph_insert(Graph ** graph, void * data, int width, size_t elementSize, GraphNode *prevRow[MAX_WIDTH])
+int graph_insert(Graph ** graph, void * data, int width, size_t elementSize)
 {
 	GraphNode * node = graph_new(elementSize);
+	GraphNode * temp = NULL;
 	//GraphNode * temp = node;
 	if (node == NULL)
 	{
@@ -59,7 +60,6 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize, Gra
 		(*graph)->tail = node;
 		(*graph)->head->x = 0;
 		(*graph)->head->y = 0;
-		prevRow[0] = node;
 	}
 	//otherwise, gotta add shit on
 	else
@@ -77,13 +77,28 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize, Gra
 				(*graph)->prevRow[node->x]->down_node = node;	//reference[x]'s bottom = new node
 				node->up_node = (*graph)->prevRow[node->x];		//new node's top = reference[x]
 			}
-			(*graph)->prevRow[node->x] = node;	//make reference[x] = new node*/
+			(*graph)->prevRow[node->x] = node;	//make reference[x] = new node
 			if (prevRow[node->x] != NULL)
 			{
 				prevRow[node->x]->down_node = node;
 				node->up_node = prevRow[node->x];
 			}
-			prevRow[node->x] = node;
+			prevRow[node->x] = node;*/
+
+			if (node->y != 0)
+			{
+				temp = (*graph)->head;
+				while (temp->y < node->y - 1)
+				{
+					temp = temp->down_node;
+				}
+				while (temp->x < node->x)
+				{
+					temp = temp->right_node;
+				}
+				temp->down_node = node;
+				node->up_node = temp;
+			}
 		}
 		else //now it's time to move to the next row
 		{
@@ -97,7 +112,7 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize, Gra
 			(*graph)->tail->down_node = node;	//iterator's bottom = new node
 			node->up_node = (*graph)->tail;		//new node's top = iterator
 			(*graph)->tail = node;				//iterator = new node
-			prevRow[0] = node;		//make reference[0] = new node
+			//prevRow[0] = node; //make reference[0] = new node
 		}
 	}
 
@@ -119,4 +134,36 @@ void graph_print(Graph ** graph)
 		ver_iter = ver_iter->down_node;
 		hor_iter = ver_iter;
 	}
+}
+
+void graph_print_squiggle(Graph ** graph, int numIterations)
+{
+	GraphNode * iter = (*graph)->head;
+	int i = 0;
+
+	if (iter == NULL)
+	{
+		slog("cant squiggle :(");
+		return;
+	}
+	slog("====SQUIGGLE====");
+	slog("x: (%i), y : (%i), data : (%d)", iter->x, iter->y, iter->data);
+	for (i = 0; i < numIterations; i++)
+	{
+		if (i % 2 == 1)
+		{
+			iter = iter->right_node;
+		}
+		else
+		{
+			iter = iter->down_node;
+		}
+		if (iter == NULL)
+		{
+			slog("squiggle stopped early");
+			return;
+		}
+		slog("x: (%i), y : (%i), data : (%d)", iter->x, iter->y, iter->data);
+	}
+	
 }

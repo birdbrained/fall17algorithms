@@ -54,22 +54,14 @@ int main(int argc, char * argv[])
 	//my stuff for assignment
 	if (myGraph != NULL)
 	{
-		//myGraph->head = graph_new(sizeof(int));
-		//myGraph->tail = graph_new(sizeof(int));
-		//myGraph->width = 4;
-		//graph_insert(myGraph, 0, myGraph->width, sizeof(int), myGraph->prevRow);
-		//graph_insert(myGraph, 1, myGraph->width, sizeof(int), myGraph->prevRow);
-		//graph_insert(myGraph, 2, myGraph->width, sizeof(int), myGraph->prevRow);
-		//graph_insert(myGraph, 3, myGraph->width, sizeof(int), myGraph->prevRow);
-		//graph_insert(myGraph, 4, myGraph->width, sizeof(int), myGraph->prevRow);
-		//graph_insert(myGraph, 5, myGraph->width, sizeof(int), myGraph->prevRow);
 		for (i = 0; i < 16; i++)
 		{
-			graph_insert(myGraph, i, myGraph->width, sizeof(int), myGraph->prevRow);
+			graph_insert(myGraph, i, myGraph->width, sizeof(int));
 		}
 		graph_print(myGraph);
 		//slog("down data from start (%i)", myGraph->head->down_node->data);
 		//slog("width: (%i)", myGraph->width);
+		graph_print_squiggle(myGraph, 7);
 	}
 
     /*main game loop*/

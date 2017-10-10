@@ -51,12 +51,14 @@ Graph * graph_init(int width, size_t elementSize);
  * @param elementSize Size of data the node will hold
  * @returns -1 if could not allocate memory; 0 if successful
  */
-int graph_insert(Graph ** graph, void * data, int width, size_t elementSize, GraphNode *prevRow[MAX_WIDTH]);
+int graph_insert(Graph ** graph, void * data, int width, size_t elementSize);
 
 /**
  * @brief Simple slog of data in graph
  * @param graph The graph to print data from
  */
 void graph_print(Graph ** graph);
+
+void graph_print_squiggle(Graph ** graph, int numIterations);
 
 #endif // !__DS_GRAPH__
