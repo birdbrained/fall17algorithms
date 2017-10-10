@@ -5,6 +5,7 @@
 
 #include <stdlib.h>
 #include "simple_logger.h"
+#include "dj_tilemap.h"
 
 /**
  * @brief A graph node data type
@@ -45,6 +46,13 @@ GraphNode * graph_new(size_t elementSize);
 Graph * graph_init(int width, size_t elementSize);
 
 /**
+ * @brief Deletes a node from a graph, and re-assigns pointers to connect holes in graph
+ * @param node The node that will be deleted
+ * @returns The data the node holds; NULL if node is null
+ */
+void * graph_delete(GraphNode ** node);
+
+/**
  * @brief Inserts a new graph node into the graph
  * @param graph The graph to insert into
  * @param data The data to insert
@@ -53,12 +61,19 @@ Graph * graph_init(int width, size_t elementSize);
  */
 int graph_insert(Graph ** graph, void * data, int width, size_t elementSize);
 
+Graph * graph_load_from_tilemap(TileMap * tilemap, size_t elementSize);
+
 /**
  * @brief Simple slog of data in graph
  * @param graph The graph to print data from
  */
 void graph_print(Graph ** graph);
 
+/**
+ * @brief Print function just to test if pointers are good
+ * @param graph The graph tp print data from
+ * @param numIterations Number of steps to take
+ */
 void graph_print_squiggle(Graph ** graph, int numIterations);
 
 #endif // !__DS_GRAPH__

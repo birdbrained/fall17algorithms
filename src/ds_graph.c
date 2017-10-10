@@ -1,5 +1,28 @@
 #include "ds_graph.h"
 
+/**
+ * @brief Called by pq_delete, frees memory associated with a dataless node
+ * @param thingThatDies The node to free
+ * @param elementSize The size of the data the node holds
+ * @returns -2 if node is NULL, -1 if data still in node, 0 if successful
+ */
+int graph_free_node(GraphNode * thingThatDies, size_t elementSize)
+{
+	if (!thingThatDies)
+	{
+		slog("Error: trying to free graph node that is null");
+		return -2;
+	}
+	if (thingThatDies->data != NULL)
+	{
+		slog("Error: trying to free graph node that still has data");
+		return -1;
+	}
+	memset(thingThatDies, 0, sizeof(GraphNode) + elementSize);
+	free(thingThatDies);
+	return 0;
+}
+
 GraphNode * graph_new(size_t elementSize)
 {
 	GraphNode * node;
@@ -38,6 +61,67 @@ Graph * graph_init(int width, size_t elementSize)
 		}
 	}
 	return grape;
+}
+
+void * graph_delete(GraphNode ** node)
+{
+	void * node_data = NULL;
+
+	if ((*node) == NULL)
+	{
+		slog("Error: cannot delete a null graph node!");
+		return NULL;
+	}
+
+	if ((*node)->up_node != NULL)
+	{
+		if ((*node)->down_node != NULL)
+		{
+			(*node)->up_node->down_node = (*node)->down_node;
+		}
+		else
+		{
+			(*node)->up_node->down_node = NULL;
+		}
+	}
+	if ((*node)->right_node != NULL)
+	{
+		if ((*node)->left_node != NULL)
+		{
+			(*node)->right_node->left_node = (*node)->left_node;
+		}
+		else
+		{
+			(*node)->right_node->left_node = NULL;
+		}
+	}
+	if ((*node)->down_node != NULL)
+	{
+		if ((*node)->up_node != NULL)
+		{
+			(*node)->down_node->up_node = (*node)->up_node;
+		}
+		else
+		{
+			(*node)->down_node->up_node = NULL;
+		}
+	}
+	if ((*node)->left_node != NULL)
+	{
+		if ((*node)->right_node != NULL)
+		{
+			(*node)->left_node->right_node = (*node)->right_node;
+		}
+		else
+		{
+			(*node)->left_node->right_node = NULL;
+		}
+	}
+
+	node_data = (*node)->data;
+	(*node)->data = NULL;
+	graph_free_node((*node), (*node)->elementSize);
+	return node_data;
 }
 
 int graph_insert(Graph ** graph, void * data, int width, size_t elementSize)
@@ -85,19 +169,19 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize)
 			}
 			prevRow[node->x] = node;*/
 
-			if (node->y != 0)
+			if (node->y != 0)					//if we aren't on the first row
 			{
-				temp = (*graph)->head;
-				while (temp->y < node->y - 1)
+				temp = (*graph)->head;			//temp = start
+				while (temp->y < node->y - 1)	//go to new node's y - 1
 				{
 					temp = temp->down_node;
 				}
-				while (temp->x < node->x)
+				while (temp->x < node->x)		//go to new node's x
 				{
 					temp = temp->right_node;
 				}
-				temp->down_node = node;
-				node->up_node = temp;
+				temp->down_node = node;			//temp's bottom = new node
+				node->up_node = temp;			//new node's top = temp
 			}
 		}
 		else //now it's time to move to the next row
@@ -117,6 +201,31 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize)
 	}
 
 	return 0;
+}
+
+Graph * graph_load_from_tilemap(TileMap * tilemap, size_t elementSize)
+{
+	Graph * graph = graph_init(tilemap->width, elementSize);
+	int i = 0;
+	int maxNodes = 0;
+	if (!graph)
+	{
+		//error slog in graph_new
+		return NULL;
+	}
+	if (!tilemap)
+	{
+		slog("Error: cannot load a graph from an empty tilemap");
+		return NULL;
+	}
+	maxNodes = tilemap->height * tilemap->width;
+
+	for (i = 0; i < maxNodes; i++)
+	{
+		graph_insert(graph, tilemap->map[i], tilemap->width, elementSize);
+	}
+
+	return graph;
 }
 
 void graph_print(Graph ** graph)

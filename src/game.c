@@ -52,7 +52,7 @@ int main(int argc, char * argv[])
 	vector2d_copy(path[2], map->end);
 
 	//my stuff for assignment
-	if (myGraph != NULL)
+	/*if (myGraph != NULL)
 	{
 		for (i = 0; i < 16; i++)
 		{
@@ -62,6 +62,11 @@ int main(int argc, char * argv[])
 		//slog("down data from start (%i)", myGraph->head->down_node->data);
 		//slog("width: (%i)", myGraph->width);
 		graph_print_squiggle(myGraph, 7);
+	}*/
+	if (myGraph != NULL)
+	{
+		myGraph = graph_load_from_tilemap(map, sizeof(char));
+		graph_print(myGraph);
 	}
 
     /*main game loop*/
