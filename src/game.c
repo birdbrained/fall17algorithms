@@ -65,7 +65,7 @@ int main(int argc, char * argv[])
 	}*/
 	if (myGraph != NULL)
 	{
-		myGraph = graph_load_from_tilemap(map, sizeof(char));
+		myGraph = graph_load_from_tilemap(map, sizeof(int));
 		graph_print(myGraph);
 	}
 

@@ -178,6 +178,63 @@ void * pq_delete_max(PriorityQueue ** pq_head, PriorityQueue ** pq_tail)
 	return endData;
 }
 
+void * pq_delete_min(PriorityQueue ** pq_head, PriorityQueue ** pq_tail)
+{
+	PriorityQueue * minPriorityNode = NULL;
+	int currMinPriority = INT_MAX;
+	PriorityQueue * temp = (*pq_tail);
+	void * endData = NULL;
+
+	if ((*pq_head) == NULL)
+	{
+		slog("Error: cannot delete min from an empty priority queue!");
+		return NULL;
+	}
+	else if ((*pq_head) == (*pq_tail))
+	{
+		minPriorityNode = (*pq_tail);
+		(*pq_head) = NULL;
+		(*pq_tail) = NULL;
+	}
+	else
+	{
+		while (temp != NULL)
+		{
+			if (temp->priority < currMinPriority)
+			{
+				currMinPriority = temp->priority;
+				minPriorityNode = temp;
+			}
+			temp = temp->next;
+		}
+		if (minPriorityNode == (*pq_tail))
+		{
+			minPriorityNode->next->prev = NULL;
+			(*pq_tail) = minPriorityNode->next;
+			minPriorityNode->next = NULL;
+		}
+		else if (minPriorityNode == (*pq_head))
+		{
+			minPriorityNode->prev->next = NULL;
+			(*pq_head) = minPriorityNode->prev;
+			minPriorityNode->prev = NULL;
+
+		}
+		else
+		{
+			minPriorityNode->prev->next = minPriorityNode->next;
+			minPriorityNode->next->prev = minPriorityNode->prev;
+			minPriorityNode->next = NULL;
+			minPriorityNode->prev = NULL;
+		}
+	}
+
+	endData = minPriorityNode->data;
+	minPriorityNode->data = NULL;
+	pq_free_node(minPriorityNode);
+	return endData;
+}
+
 int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, size_t elementSize, int priority)
 {
 	PriorityQueue * n = pq_new(elementSize);

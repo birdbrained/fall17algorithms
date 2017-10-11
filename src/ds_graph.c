@@ -51,15 +51,7 @@ Graph * graph_init(int width, size_t elementSize)
 	grape->head = graph_new(elementSize);
 	grape->tail = graph_new(elementSize);
 	grape->width = width;
-	for (i = 0; i < width; i++)
-	{
-		grape->prevRow[i] = (GraphNode *)malloc(sizeof(GraphNode));
-		if (grape->prevRow[i] == NULL)
-		{
-			slog("Error: could not allocate memory for prevRow[%i]", i);
-			return NULL;
-		}
-	}
+	atexit(graph_delete_all);
 	return grape;
 }
 
@@ -124,6 +116,36 @@ void * graph_delete(GraphNode ** node)
 	return node_data;
 }
 
+int graph_delete_all(Graph ** graph)
+{
+	GraphNode * hor_iter = NULL;
+	GraphNode * ver_iter = NULL;
+	GraphNode * temp = NULL;
+
+	if (graph != NULL)
+	{
+		slog("Error: trying to delete a graph that is NULL");
+		return -1;
+	}
+
+	hor_iter = (*graph)->head;
+	ver_iter = (*graph)->head;
+
+	while (ver_iter != NULL)
+	{
+		hor_iter = ver_iter;
+		ver_iter = ver_iter->down_node;
+		while (hor_iter != NULL)
+		{
+			temp = hor_iter;
+			hor_iter = hor_iter->right_node;
+			graph_delete(temp);
+		}
+	}
+
+	return 0;
+}
+
 int graph_insert(Graph ** graph, void * data, int width, size_t elementSize)
 {
 	GraphNode * node = graph_new(elementSize);
@@ -134,7 +156,7 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize)
 		return -1;
 	}
 
-	node->data = data;
+	node->data = (int)data - '0';
 	node->elementSize = elementSize;
 
 	//if the node is the first one to be added
@@ -228,16 +250,27 @@ Graph * graph_load_from_tilemap(TileMap * tilemap, size_t elementSize)
 	return graph;
 }
 
+void graph_traverse(Graph ** graph)
+{
+
+}
+
+void graph_a_star(GraphNode ** start, GraphNode ** goal)
+{
+
+}
+
 void graph_print(Graph ** graph)
 {
 	GraphNode * hor_iter = (*graph)->head;
 	GraphNode * ver_iter = (*graph)->head;
+	int data = 0;
 
 	while (ver_iter != NULL)
 	{
 		while (hor_iter != NULL)
 		{
-			slog("x: (%i), y: (%i), data: (%d)", hor_iter->x, hor_iter->y, hor_iter->data);
+			slog("x: (%i), y: (%i), data: (%i)", hor_iter->x, hor_iter->y, hor_iter->data);
 			hor_iter = hor_iter->right_node;
 		}
 		ver_iter = ver_iter->down_node;
@@ -274,5 +307,4 @@ void graph_print_squiggle(Graph ** graph, int numIterations)
 		}
 		slog("x: (%i), y : (%i), data : (%d)", iter->x, iter->y, iter->data);
 	}
-	
 }

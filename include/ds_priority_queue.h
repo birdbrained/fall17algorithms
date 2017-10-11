@@ -15,6 +15,7 @@ Node * pqDequeue(Node * pq);
 */
 
 #include <SDL.h>
+#include <limits.h>
 
 /**
  * @brief A priority queue data structure
@@ -50,6 +51,14 @@ void * pq_delete(PriorityQueue ** pq_head, PriorityQueue ** pq_tail);
  * @returns The data within the highest priority node
  */
 void * pq_delete_max(PriorityQueue ** pq_head, PriorityQueue ** pq_tail);
+
+/**
+ * @brief Dequeues the element in the pq with the lowest priority
+ * @param pq_head Head node of pq (most recent in)
+ * @param pq_tail Tail node of pq (first in)
+ * @returns The data within the lowest priority node
+ */
+void * pq_delete_min(PriorityQueue ** pq_head, PriorityQueue ** pq_tail);
 
 /**
  * @brief Inserts a new node into the priority queue, tail points to first in, head points to most recently added
