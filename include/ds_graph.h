@@ -22,6 +22,7 @@ typedef struct graphnode_s
 	struct graphnode_s * down_node;
 	struct graphnode_s * left_node;
 	size_t elementSize;					/**<size of the data*/
+	int f, g, h;
 }GraphNode;
 
 typedef struct graph_s
@@ -29,7 +30,7 @@ typedef struct graph_s
 	GraphNode * head;					/**<pointer to start of graph*/
 	GraphNode * tail;					/**<pointer to most recently added node, aka the end*/
 	int width;							/**<how wide a row should be before moving to the next*/
-	//GraphNode * prevRow[MAX_WIDTH];		/**<used for linking up and down node pointers*/
+	//GraphNode * prevRow[MAX_WIDTH]; /**<used for linking up and down node pointers, this is bad*/
 }Graph;
 
 /**
@@ -69,11 +70,38 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize);
  * @brief Loads a graph from an exisiting tilemap
  * @param tilemap The tilemap to build the graph from
  * @param elementSize The size of data each node will hold
+ * @param charToInt Decides if it is required to remove the '\0' from a char or not
  * @returns The completed graph; NULL if failure
  */
-Graph * graph_load_from_tilemap(TileMap * tilemap, size_t elementSize);
+Graph * graph_load_from_tilemap(TileMap * tilemap, size_t elementSize, short unsigned int charToInt);
 
+/**
+ * @brief Finds a certain node in the graph
+ * @param graph The graph to search in
+ * @param x X value of requested node
+ * @param y Y value of requested node
+ * @returns Pointer to GraphNode of the found node;
+ *          NULL if node either could not be found or does not exist
+ */
+GraphNode * graph_find_node(Graph ** graph, unsigned int x, unsigned int y);
+
+/**
+ * @brief Unused
+ */
 void graph_traverse(Graph ** graph);
+
+/**
+ * @brief Performs an A* search in a graph to find if a path exists from start to end
+ * @param start The starting node of the search
+ * @param goal The ending node of the search
+ * @param elementSize Size of data a node will hold
+ * @returns 1 if search successful;
+ *          0 if search ended with no path found;
+ *          -1 if start was NULL;
+ *          -2 if goal was NULL;
+ *          -3 if search failed part-way through
+ */
+int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize);
 
 /**
  * @brief Simple slog of data in graph
@@ -86,6 +114,6 @@ void graph_print(Graph ** graph);
  * @param graph The graph tp print data from
  * @param numIterations Number of steps to take
  */
-void graph_print_squiggle(Graph ** graph, int numIterations);
+GraphNode * graph_print_squiggle(Graph ** graph, int numIterations);
 
 #endif // !__DS_GRAPH__

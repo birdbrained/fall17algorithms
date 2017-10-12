@@ -156,7 +156,7 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize)
 		return -1;
 	}
 
-	node->data = (int)data - '0';
+	node->data = data;
 	node->elementSize = elementSize;
 
 	//if the node is the first one to be added
@@ -222,10 +222,15 @@ int graph_insert(Graph ** graph, void * data, int width, size_t elementSize)
 		}
 	}
 
+	if ((*graph)->tail == NULL)
+	{
+		(*graph)->tail = node;
+	}
+
 	return 0;
 }
 
-Graph * graph_load_from_tilemap(TileMap * tilemap, size_t elementSize)
+Graph * graph_load_from_tilemap(TileMap * tilemap, size_t elementSize, short unsigned int charToInt)
 {
 	Graph * graph = graph_init(tilemap->width, elementSize);
 	int i = 0;
@@ -244,10 +249,53 @@ Graph * graph_load_from_tilemap(TileMap * tilemap, size_t elementSize)
 
 	for (i = 0; i < maxNodes; i++)
 	{
-		graph_insert(graph, tilemap->map[i], tilemap->width, elementSize);
+		if (charToInt)
+		{
+			graph_insert(graph, tilemap->map[i] - '0', tilemap->width, elementSize);
+		}
+		else
+		{
+			graph_insert(graph, tilemap->map[i], tilemap->width, elementSize);
+		}
 	}
 
 	return graph;
+}
+
+GraphNode * graph_find_node(Graph ** graph, unsigned int x, unsigned int y)
+{
+	GraphNode * iter = NULL;
+
+	if (graph == NULL)
+	{
+		slog("Error: cannot find node from an empty graph");
+		return NULL;
+	}
+
+	iter = graph_new((*graph)->head->elementSize);
+	iter = (*graph)->head;
+
+	while (iter != NULL && iter->x < x)
+	{
+		iter = iter->right_node;
+	}
+	if (iter == NULL || iter->x != x)
+	{
+		slog("Error: node with x value (%i) does not exist in graph", x);
+		return NULL;
+	}
+	while (iter != NULL && iter->y < y)
+	{
+		iter = iter->down_node;
+	}
+	if (iter == NULL || iter->y != y)
+	{
+		slog("Error: node with y value (%i) does not exist in graph", y);
+		return NULL;
+	}
+
+	slog("Found node x (%i) y (%i) data (%i)", iter->x, iter->y, iter->data);
+	return iter;
 }
 
 void graph_traverse(Graph ** graph)
@@ -255,9 +303,95 @@ void graph_traverse(Graph ** graph)
 
 }
 
-void graph_a_star(GraphNode ** start, GraphNode ** goal)
+int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize)
 {
+	PriorityQueue * closedNodes_head = pq_new(sizeof(GraphNode) + elementSize);
+	PriorityQueue * closedNodes_tail = pq_new(sizeof(GraphNode) + elementSize);
+	PriorityQueue * openNodes_head = pq_new(sizeof(GraphNode) + elementSize);
+	PriorityQueue * openNodes_tail = pq_new(sizeof(GraphNode) + elementSize);
+	GraphNode * q = graph_new(elementSize);
+	GraphNode * successor = graph_new(elementSize);
+	int i = 0;
+	int stepsTaken = 0;
 
+	if (start == NULL)
+	{
+		slog("Error: start was NULL");
+		return -1;
+	}
+	if ((*start) == NULL)
+	{
+		slog("Error: start was NULL");
+		return -1;
+	}
+	if (goal == NULL)
+	{
+		slog("Error: goal was NULL");
+		return -2;
+	}
+
+	pq_insert(openNodes_head, openNodes_tail, (*start), elementSize, 0);
+
+	while (openNodes_tail != NULL)
+	{
+		q = pq_delete_min(openNodes_head, openNodes_tail);
+		stepsTaken++;
+
+		if (q == NULL)
+		{
+			slog("Error: could not complete A* because q was NULL");
+			return -3;
+		}
+
+		for (i = 0; i < 4; i++)
+		{
+			switch (i)
+			{
+			case 0:
+				successor = q->up_node;
+				break;
+			case 1:
+				successor = q->right_node;
+				break;
+			case 2:
+				successor = q->down_node;
+				break;
+			case 3:
+				successor = q->left_node;
+				break;
+			}
+
+			if (successor == NULL)
+			{
+				//node either doesn't exist or is impassible
+				continue;
+			}
+
+			successor->g = stepsTaken;
+			successor->h = abs(successor->x - goal->x) + abs(successor->y - goal->y);
+			successor->f = successor->g + successor->h;
+			slog("data of x (%i) y(%i) is (%i)", successor->x, successor->y, successor->data);
+
+			if (successor == goal)
+			{
+				//we have found the goal!
+				return 1;
+			}
+			else if (successor->traversed > 0 || successor->data > 0)
+			{
+				//if you have already been here or can't go here
+				continue;
+			}
+			else
+			{
+				pq_insert(openNodes_head, openNodes_tail, successor, elementSize, successor->f);
+			}
+		}
+		q->traversed = 1;
+		pq_insert(closedNodes_head, closedNodes_tail, q, elementSize, q->f);
+	}
+	return 0;
+	
 }
 
 void graph_print(Graph ** graph)
@@ -278,7 +412,7 @@ void graph_print(Graph ** graph)
 	}
 }
 
-void graph_print_squiggle(Graph ** graph, int numIterations)
+GraphNode * graph_print_squiggle(Graph ** graph, int numIterations)
 {
 	GraphNode * iter = (*graph)->head;
 	int i = 0;
@@ -303,8 +437,9 @@ void graph_print_squiggle(Graph ** graph, int numIterations)
 		if (iter == NULL)
 		{
 			slog("squiggle stopped early");
-			return;
+			return NULL;
 		}
 		slog("x: (%i), y : (%i), data : (%d)", iter->x, iter->y, iter->data);
 	}
+	return iter;
 }

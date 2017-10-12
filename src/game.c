@@ -25,6 +25,8 @@ int main(int argc, char * argv[])
 
 	//Assignment variables
 	Graph *myGraph = graph_init(4, sizeof(int));
+	//Graph *testAStar = graph_init(4, sizeof(int));
+	GraphNode *start, *goal;
 	int i = 0;
     
     /*program initializtion*/
@@ -65,9 +67,40 @@ int main(int argc, char * argv[])
 	}*/
 	if (myGraph != NULL)
 	{
-		myGraph = graph_load_from_tilemap(map, sizeof(int));
-		graph_print(myGraph);
+		myGraph = graph_load_from_tilemap(map, sizeof(int), 1);
+		start = graph_find_node(myGraph, map->start.x, map->start.y);
+		goal = graph_find_node(myGraph, map->end.x, map->end.y);
+		if (start != NULL && goal != NULL)
+		{
+			slog("reach the end? %i", graph_a_star(&start, goal, sizeof(int)));
+		}
+		//graph_print(myGraph);
 	}
+	/*if (testAStar != NULL)
+	{
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 1, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 1, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 1, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 1, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
+		start = graph_find_node(testAStar, 0, 0);
+		goal = graph_find_node(testAStar, 0, 3);
+		if (start != NULL && goal != NULL)
+		{
+			slog("reach the end? %i", graph_a_star(&start, goal, sizeof(int)));
+		}
+	}*/
 
     /*main game loop*/
     while(!done)
