@@ -71,7 +71,7 @@ int main(int argc, char * argv[])
 	}
 	while (endingTrail_tail != NULL && endingTrail_tail->data != NULL)
 	{
-		data = pq_delete(endingTrail_head, endingTrail_tail);
+		data = pq_delete_max(endingTrail_head, endingTrail_tail);
 		currentDrawPath.x = data->x;//(data->x * map->tileset->frame_w) + (map->tileset->frame_w / 2) + map->start.x;
 		currentDrawPath.y = data->y;//(data->y * map->tileset->frame_h) + (map->tileset->frame_h / 2) + map->start.y;
 		vector2d_copy(path[i], currentDrawPath);
