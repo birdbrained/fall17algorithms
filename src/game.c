@@ -64,7 +64,8 @@ int main(int argc, char * argv[])
 		goal = graph_find_node(myGraph, map->end.x, map->end.y);
 		if (start != NULL && goal != NULL)
 		{
-			slog("reach the end? %i", graph_a_star(&start, goal, sizeof(int), endingTrail_head, endingTrail_tail));
+			//slog("reach the end? %i", graph_a_star(&start, goal, sizeof(int), endingTrail_head, endingTrail_tail));
+			graph_a_star(&start, goal, sizeof(int), endingTrail_head, endingTrail_tail);
 		}
 		//graph_print(myGraph);
 	}
@@ -75,7 +76,7 @@ int main(int argc, char * argv[])
 		currentDrawPath.y = data->y;//(data->y * map->tileset->frame_h) + (map->tileset->frame_h / 2) + map->start.y;
 		vector2d_copy(path[i], currentDrawPath);
 		i++;
-		slog("final: x (%i), y (%i), data (%i)", data->x, data->y, data->data);
+		//slog("final: x (%i), y (%i), data (%i)", data->x, data->y, data->data);
 	}
 	//vector2d_copy(path[i], map->end);
 

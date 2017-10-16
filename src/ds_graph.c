@@ -294,7 +294,7 @@ GraphNode * graph_find_node(Graph ** graph, unsigned int x, unsigned int y)
 		return NULL;
 	}
 
-	slog("Found node x (%i) y (%i) data (%i)", iter->x, iter->y, iter->data);
+	//slog("Found node x (%i) y (%i) data (%i)", iter->x, iter->y, iter->data);
 	return iter;
 }
 
@@ -372,7 +372,7 @@ int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize, Prior
 			successor->g = stepsTaken;
 			successor->h = abs(successor->x - goal->x) + abs(successor->y - goal->y);
 			successor->f = successor->g + successor->h;
-			slog("data of x (%i) y(%i) is (%i)", successor->x, successor->y, successor->data);
+			//slog("data of x (%i) y(%i) is (%i)", successor->x, successor->y, successor->data);
 
 			if (successor == goal)
 			{
@@ -381,7 +381,7 @@ int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize, Prior
 				while (successor != NULL)
 				{
 					pq_insert(endingTrail_head, endingTrail_tail, successor, sizeof(successor), j);
-					slog("parenting... x (%i) y (%i) data(%i)", successor->x, successor->y, successor->data);
+					//slog("parenting... x (%i) y (%i) data(%i)", successor->x, successor->y, successor->data);
 					successor = successor->parent;
 					j++;
 				}
