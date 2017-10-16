@@ -303,7 +303,7 @@ void graph_traverse(Graph ** graph)
 
 }
 
-int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize)
+int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize, PriorityQueue ** endingTrail_head, PriorityQueue ** endingTrail_tail)
 {
 	PriorityQueue * closedNodes_head = pq_new(sizeof(GraphNode) + elementSize);
 	PriorityQueue * closedNodes_tail = pq_new(sizeof(GraphNode) + elementSize);
@@ -312,7 +312,9 @@ int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize)
 	GraphNode * q = graph_new(elementSize);
 	GraphNode * successor = graph_new(elementSize);
 	int i = 0;
+	int j = 0;
 	int stepsTaken = 0;
+	Vector2D location = { 0, 0 };
 
 	if (start == NULL)
 	{
@@ -374,7 +376,16 @@ int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize)
 
 			if (successor == goal)
 			{
+				successor->parent = q;
 				//we have found the goal!
+				while (successor != NULL)
+				{
+					pq_insert(endingTrail_head, endingTrail_tail, successor, sizeof(successor), j);
+					slog("parenting... x (%i) y (%i) data(%i)", successor->x, successor->y, successor->data);
+					successor = successor->parent;
+					j++;
+				}
+				//return endingTrail_tail;
 				return 1;
 			}
 			else if (successor->traversed > 0 || successor->data > 0)
@@ -384,6 +395,7 @@ int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize)
 			}
 			else
 			{
+				successor->parent = q;
 				pq_insert(openNodes_head, openNodes_tail, successor, elementSize, successor->f);
 			}
 		}

@@ -91,6 +91,21 @@ PriorityQueue * pq_new(size_t elementSize)
 	return pq;
 }
 
+PQ * pq_init(size_t elementSize)
+{
+	PQ * pq;
+	pq = (PQ *)malloc(sizeof(PQ));
+	if (pq == NULL)
+	{
+		slog("Error: could not allocate memory for a new PQ");
+		return NULL;
+	}
+	memset(pq, 0, sizeof(PQ));
+	pq->head = pq_new(elementSize);
+	pq->tail = pq_new(elementSize);
+	return pq;
+}
+
 void * pq_delete(PriorityQueue ** pq_head, PriorityQueue ** pq_tail)
 {
 	PriorityQueue * temp = NULL;
@@ -239,6 +254,11 @@ int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, si
 {
 	PriorityQueue * n = pq_new(elementSize);
 
+	/*if (pq_head == NULL || pq_tail == NULL)
+	{
+		slog("Error: head or tail was NULL");
+		return -1;
+	}*/
 	if (n == NULL)
 	{
 		return -1;
@@ -252,7 +272,7 @@ int pq_insert(PriorityQueue ** pq_head, PriorityQueue ** pq_tail, void *data, si
 	n->priority = priority;
 
 	//If the priority queue doesn't have anything in it yet
-	if ((*pq_head) == NULL)
+	if (pq_head == NULL || (*pq_head) == NULL)
 	{
 		(*pq_head) = n;
 		(*pq_tail) = n;

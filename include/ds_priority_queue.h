@@ -29,12 +29,20 @@ typedef struct priorityqueue
 	size_t elementSize;				/**<Size of the data*/
 }PriorityQueue;
 
+typedef struct pq_s
+{
+	PriorityQueue * head;
+	PriorityQueue * tail;
+}PQ;
+
 /**
  * @brief Creates a new priority queue
  * @param elementSize The size of the data the pq will hold
  * @returns Pointer to new PriorityQueue node; NULL if could not allocate memory
  */
 PriorityQueue * pq_new(size_t elementSize);
+
+PQ * pq_init(size_t elementSize);
 
 /**
  * @brief Dequeues the first (oldest) element in the pq

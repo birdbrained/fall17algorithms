@@ -23,6 +23,7 @@ typedef struct graphnode_s
 	struct graphnode_s * left_node;
 	size_t elementSize;					/**<size of the data*/
 	int f, g, h;
+	struct graphnode_s * parent;
 }GraphNode;
 
 typedef struct graph_s
@@ -101,7 +102,7 @@ void graph_traverse(Graph ** graph);
  *          -2 if goal was NULL;
  *          -3 if search failed part-way through
  */
-int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize);
+int graph_a_star(GraphNode ** start, GraphNode * goal, size_t elementSize, PriorityQueue ** endingTrail_head, PriorityQueue ** endingTrail_tail);
 
 /**
  * @brief Simple slog of data in graph
