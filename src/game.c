@@ -30,6 +30,7 @@ int main(int argc, char * argv[])
 	PriorityQueue * endingTrail_head = pq_new(sizeof(GraphNode) + sizeof(int));
 	PriorityQueue * endingTrail_tail = pq_new(sizeof(GraphNode) + sizeof(int));
 	int i = 0;
+	Vector2D currentDrawPath = { 0, 0 };
     
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -56,17 +57,6 @@ int main(int argc, char * argv[])
 	//vector2d_copy(path[2], map->end);
 
 	//my stuff for assignment
-	/*if (myGraph != NULL)
-	{
-		for (i = 0; i < 16; i++)
-		{
-			graph_insert(myGraph, i, myGraph->width, sizeof(int));
-		}
-		graph_print(myGraph);
-		//slog("down data from start (%i)", myGraph->head->down_node->data);
-		//slog("width: (%i)", myGraph->width);
-		graph_print_squiggle(myGraph, 7);
-	}*/
 	if (myGraph != NULL)
 	{
 		myGraph = graph_load_from_tilemap(map, sizeof(int), 1);
@@ -81,33 +71,14 @@ int main(int argc, char * argv[])
 	while (endingTrail_tail != NULL && endingTrail_tail->data != NULL)
 	{
 		data = pq_delete(endingTrail_head, endingTrail_tail);
+		currentDrawPath.x = data->x;//(data->x * map->tileset->frame_w) + (map->tileset->frame_w / 2) + map->start.x;
+		currentDrawPath.y = data->y;//(data->y * map->tileset->frame_h) + (map->tileset->frame_h / 2) + map->start.y;
+		vector2d_copy(path[i], currentDrawPath);
+		i++;
 		slog("final: x (%i), y (%i), data (%i)", data->x, data->y, data->data);
 	}
-	/*if (testAStar != NULL)
-	{
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 1, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 1, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 1, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 1, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		graph_insert(testAStar, 0, testAStar->width, sizeof(int));
-		start = graph_find_node(testAStar, 0, 0);
-		goal = graph_find_node(testAStar, 0, 3);
-		if (start != NULL && goal != NULL)
-		{
-			slog("reach the end? %i", graph_a_star(&start, goal, sizeof(int)));
-		}
-	}*/
+	//vector2d_copy(path[i], map->end);
+
 
     /*main game loop*/
     while(!done)
@@ -126,7 +97,7 @@ int main(int argc, char * argv[])
 		gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
 		tilemap_draw(map, vector2d(86, 24));
-		tilemap_draw_path(path, 3, map, vector2d(86, 24));
+		tilemap_draw_path(path, i, map, vector2d(86, 24));
 
 		//UI elements last
 		gf2d_sprite_draw(
