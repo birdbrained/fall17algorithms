@@ -1,7 +1,7 @@
 #include "ds_graph.h"
 
 /**
- * @brief Called by pq_delete, frees memory associated with a dataless node
+ * @brief Called by graph_delete, frees memory associated with a dataless node
  * @param thingThatDies The node to free
  * @param elementSize The size of the data the node holds
  * @returns -2 if node is NULL, -1 if data still in node, 0 if successful
