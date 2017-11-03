@@ -43,6 +43,13 @@ Hashmap * hashmap_init(unsigned int maxNodes);
 HashmapNode * hashmap_new_node(size_t elementSize);
 
 /**
+ * @brief Called whenever the hashmap fills up, doubles the size of the hashmap and re-hashes all key/value pairs
+ * @param hashbrown The hashmap to re-hash, it will get cleared from memory
+ * @returns A re-sized hashmap with all elements from old hashmap re-hashed if successful; NULL is hashbrown was NULL
+ */
+Hashmap * hashmap_rehash(Hashmap * hashbrown);
+
+/**
  * @brief Inserts a new key/value pair into a hashmap
  * @param hashbrown The hashmap to insert into
  * @param key The key of the pair

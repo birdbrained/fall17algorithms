@@ -54,6 +54,33 @@ HashmapNode * hashmap_new_node(size_t elementSize)
 	return node;
 }
 
+Hashmap * hashmap_rehash(Hashmap * hashbrown)
+{
+	Hashmap * new_map = NULL;
+	char key[MAX_KEY_LENGTH] = "";
+	void * data = NULL;
+	int i = 0;
+	if (!hashbrown)
+	{
+		slog("Error: cannot re-hash a null hashmap");
+		return NULL;
+	}
+
+	new_map = hashmap_init(hashbrown->maxNodes * 2);
+	for (i = 0; i < hashbrown->maxNodes; i++)
+	{
+		if (strncmp(hashbrown->map[i].key, "", MAX_KEY_LENGTH) != 0)
+		{
+			strncpy(key, hashbrown->map[i].key, MAX_KEY_LENGTH);
+			data = hashbrown->map[i].value;
+			hashmap_insert(&new_map, key, data, hashbrown->map[i].elementSize);
+		}
+	}
+
+	hashmap_clear(hashbrown);
+	return new_map;
+}
+
 int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t elementSize)
 {
 	unsigned long _key = crappy_hash(key);
@@ -93,16 +120,22 @@ int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t element
 			index++;
 			if (_index == index)
 			{
-				slog("Error: hashmap was full");
-				return -3;
+				//slog("Error: hashmap was full");
+				//return -3;
+				(*hashbrown) = hashmap_rehash((*hashbrown));
+				index = _key % (*hashbrown)->maxNodes;
+				_index = index;
 			}
 			else if (index >= (*hashbrown)->maxNodes)
 			{
 				index = 0;
 				if (_index == index)
 				{
-					slog("Error: hashmap was full");
-					return -3;
+					//slog("Error: hashmap was full");
+					//return -3;
+					(*hashbrown) = hashmap_rehash((*hashbrown));
+					index = _key % (*hashbrown)->maxNodes;
+					_index = index;
 				}
 			}
 		}

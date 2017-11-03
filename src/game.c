@@ -115,20 +115,20 @@ int main(int argc, char * argv[])
 	//*/
 
 	//slog("hash (%i)", crappy_hash(c));
-	hashbrown = hashmap_init(50);
-	hashmap_insert(&hashbrown, "my key", 5, sizeof(int));
+	hashbrown = hashmap_init(10);
+	/*hashmap_insert(&hashbrown, "my key", 5, sizeof(int));
 	hashmap_insert(&hashbrown, "my keyy", 9, sizeof(int));
 	hashmap_print(hashbrown);
 	hashmap_delete(&hashbrown, "my key");
 	slog("delete pair");
-	hashmap_print(hashbrown);
-	/*for (j = 35; j < 46; j++)
+	hashmap_print(hashbrown);*/
+	for (j = 35; j < 46; j++)
 	{
 		c = (char)j;
 		hashmap_insert(&hashbrown, &c, j, sizeof(int));
 	}
 	hashmap_print(hashbrown);
-	c = (char)37;
+	/*c = (char)37;
 	data = hashmap_get_data(hashbrown, &c);
 	if (data != NULL)
 		slog("trying value (%i)", (int)data);
