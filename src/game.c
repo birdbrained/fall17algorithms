@@ -1,10 +1,12 @@
 #include <SDL.h>
 #include <stdio.h>
+#include <string.h>
 #include "gf2d_graphics.h"
 #include "gf2d_sprite.h"
 #include "simple_logger.h"
 #include "gf2d_draw.h"
 #include "gf2d_collision.h"
+#include "ds_hashmap.h"
 
 int main(int argc, char * argv[])
 {
@@ -12,6 +14,8 @@ int main(int argc, char * argv[])
 	int done = 0;
 	const Uint8 * keys;
 	Sprite *sprite = NULL;
+	char * c = "my string";
+	Hashmap * hashbrown = NULL;
 
 	int mx, my, i;
 	float mf = 0;
@@ -52,9 +56,9 @@ int main(int argc, char * argv[])
 	shape[2] = gf2d_shape_rect(-32, -32, 64, 64);
 	shape[3] = gf2d_shape_rect(-16, -16, 32, 32);
 
-	//	gf2d_space_add_static_shape(space,gf2d_shape_rect(200,500, 512,32));
+	gf2d_space_add_static_shape(space,gf2d_shape_rect(200,500, 512,32));
 	/* Stress test*/
-	for (i = 0; i < 100;i++)
+	for (i = 0; i < 50;i++)
 	{
 		gf2d_body_set(
 			&body[i],
@@ -107,6 +111,12 @@ int main(int argc, char * argv[])
 	//         gf2d_space_add_body(space,&body[1]);
 
 	//*/
+
+	//slog("hash (%i)", crappy_hash(c));
+	hashbrown = hashmap_init(10);
+	hashmap_insert(&hashbrown, "my key", 5, sizeof(int));
+	hashmap_print(hashbrown);
+	
 	/*main game loop*/
 	while (!done)
 	{
@@ -122,9 +132,9 @@ int main(int argc, char * argv[])
 									 // all drawing should happen betweem clear_screen and next_frame
 									 //backgrounds drawn first
 		gf2d_sprite_draw_image(sprite, vector2d(0, 0));
-		gf2d_space_update(space);
+		//gf2d_space_update(space);
 
-		gf2d_space_draw(space);
+		//gf2d_space_draw(space);
 		//UI elements last
 		gf2d_sprite_draw(
 			mouse,
@@ -138,7 +148,7 @@ int main(int argc, char * argv[])
 		gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 
 		if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
-		slog("Rendering at %f FPS", gf2d_graphics_get_frames_per_second());
+		//slog("Rendering at %f FPS", gf2d_graphics_get_frames_per_second());
 	}
 
 	gf2d_space_free(space);
