@@ -115,9 +115,9 @@ int main(int argc, char * argv[])
 	//*/
 
 	//slog("hash (%i)", crappy_hash(c));
-	hashbrown = hashmap_init(10);
+	hashbrown = hashmap_init(50);
 	hashmap_insert(&hashbrown, "my key", 5, sizeof(int));
-	hashmap_insert(&hashbrown, "my key1", 9, sizeof(int));
+	hashmap_insert(&hashbrown, "my keyy", 9, sizeof(int));
 	hashmap_print(hashbrown);
 	hashmap_delete(&hashbrown, "my key");
 	slog("delete pair");
@@ -170,6 +170,7 @@ int main(int argc, char * argv[])
 	}
 
 	gf2d_space_free(space);
+	hashmap_clear(hashbrown);
 	slog("---==== END ====---");
 	return 0;
 }

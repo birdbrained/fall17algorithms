@@ -181,10 +181,89 @@ void * hashmap_delete(Hashmap ** hashbrown, char * key)
 	{
 		data = (*hashbrown)->map[index].value;
 		memset(&(*hashbrown)->map[index], 0, sizeof(HashmapNode) + (*hashbrown)->map[index].elementSize);
-		return data;
+	}
+	else
+	{
+		while (strncmp((*hashbrown)->map[index].key, "", MAX_KEY_LENGTH) != 0)
+		{
+			index++;
+			if (_index == index)
+			{
+				slog("Error: could not find key (%s) in hashmap", key);
+				return NULL;
+			}
+			else if (index >= (*hashbrown)->maxNodes)
+			{
+				index = 0;
+				if (_index == index)
+				{
+					slog("Error: could not find key (%s) in hashmap", key);
+					return NULL;
+				}
+			}
+			else
+			{
+				if (strncmp((*hashbrown)->map[index].key, key, MAX_KEY_LENGTH) == 0)
+				{
+					data = (*hashbrown)->map[index].value;
+					memset(&(*hashbrown)->map[index], 0, sizeof(HashmapNode) + (*hashbrown)->map[index].elementSize);
+					break;
+				}
+			}
+		}
 	}
 
 	return data;
+}
+
+/**
+ * @brief Clears one node from memory
+ * @param node The node to clear
+ * @param elementSize The size of the data the node holds
+ * @returns 0 if successful, -1 if node was null
+ */
+int hashmap_clear_node(HashmapNode * node, size_t elementSize)
+{
+	if (!node)
+	{
+		slog("Error: could not clear a node that is null");
+		return -1;
+	}
+	if (node->value != NULL)
+	{
+		slog("Error: data still present in node");
+		return -2;
+	}
+
+	memset(node, 0, sizeof(HashmapNode) + elementSize);
+	//free(node);
+	return 0;
+}
+
+int hashmap_clear(Hashmap * hashbrown)
+{
+	int i = 0;
+
+	if (!hashbrown)
+	{
+		slog("Error: could not clear a hashmap that is null");
+		return -1;
+	}
+
+	for (i = 0; i < hashbrown->maxNodes; i++)
+	{
+		if (strncmp(hashbrown->map[i].key, "", MAX_KEY_LENGTH) != 0)
+		{
+			strncpy(hashbrown->map[i].key, "", MAX_KEY_LENGTH);
+			hashbrown->map[i].value = NULL;
+			hashbrown->map[i].elementSize = NULL;
+			hashmap_clear_node(&hashbrown->map[i], hashbrown->map[i].elementSize);
+		}
+	}
+	
+	//memset(hashbrown, 0, sizeof(Hashmap));
+	free(hashbrown);
+	return 0;
 }
 
 void hashmap_print(Hashmap * hashbrown)

@@ -53,8 +53,8 @@ HashmapNode * hashmap_new_node(size_t elementSize);
 int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t elementSize);
 
 /**
- * @brief Searches a hashmap for a value from a given key
- * @param hashbrown The hashmap to search
+ * @brief Searches a hashmap for a value from a given key, does not delete pair from hashmap
+ * @param hashbrown The hashmap to search from
  * @param key The key to lookup
  * @returns The data associated with the key; NULL if key was not found or if hashbrown was NULL
  */
@@ -62,8 +62,17 @@ void * hashmap_get_data(Hashmap * hashbrown, char * key);
 
 /**
  * @brief Removes a key/value pair from the hashmap and returns the value
+ * @param hashbrown The hashmap to search from
+ * @param key The key to lookup
+ * @returns The data associated with the key; NULL if key was not found or if hashbrown was NULL
  */
 void * hashmap_delete(Hashmap ** hashbrown, char * key);
+
+/**
+ * @brief Clears an entire hashmap from memory
+ * @param hashbrown The hashmap to clear
+ * @returns 0 if successful; -1 if hashbrown was NULL
+ */
 int hashmap_clear(Hashmap * hashbrown);
 
 /**
