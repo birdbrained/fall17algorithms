@@ -112,6 +112,81 @@ int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t element
 	return 0;
 }
 
+void * hashmap_get_data(Hashmap * hashbrown, char * key)
+{
+	unsigned long _key = crappy_hash(key);
+	void * data = NULL;
+	int index = 0;
+	int _index = 0;
+	if (!hashbrown)
+	{
+		slog("Error: could not get data from a null hashmap");
+		return NULL;
+	}
+	index = _key % hashbrown->maxNodes;
+	_index = index;
+
+	if (strncmp(hashbrown->map[index].key, key, MAX_KEY_LENGTH) == 0)
+	{
+		data = hashbrown->map[index].value;
+	}
+	else
+	{
+		while (strncmp(hashbrown->map[index].key, "", MAX_KEY_LENGTH) != 0)
+		{
+			index++;
+			if (_index == index)
+			{
+				slog("Error: could not find key (%s) in hashmap", key);
+				return NULL;
+			}
+			else if (index >= hashbrown->maxNodes)
+			{
+				index = 0;
+				if (_index == index)
+				{
+					slog("Error: could not find key (%s) in hashmap", key);
+					return NULL;
+				}
+			}
+			else
+			{
+				if (strncmp(hashbrown->map[index].key, key, MAX_KEY_LENGTH) == 0)
+				{
+					data = hashbrown->map[index].value;
+					break;
+				}
+			}
+		}
+	}
+
+	return data;
+}
+
+void * hashmap_delete(Hashmap ** hashbrown, char * key)
+{
+	unsigned long _key = crappy_hash(key);
+	void * data = NULL;
+	int index = 0;
+	int _index = 0;
+	if (!hashbrown)
+	{
+		slog("Error: could not delete a node from a null hashmap");
+		return NULL;
+	}
+	index = _key % (*hashbrown)->maxNodes;
+	_index = index;
+
+	if (strncmp((*hashbrown)->map[index].key, key, MAX_KEY_LENGTH) == 0)
+	{
+		data = (*hashbrown)->map[index].value;
+		memset(&(*hashbrown)->map[index], 0, sizeof(HashmapNode) + (*hashbrown)->map[index].elementSize);
+		return data;
+	}
+
+	return data;
+}
+
 void hashmap_print(Hashmap * hashbrown)
 {
 	int i = 0;

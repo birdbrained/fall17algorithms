@@ -5,19 +5,25 @@
 #include <string.h>
 #include "simple_logger.h"
 
-#define MAX_KEY_LENGTH 512	/**<Maximum length for the key*/
+#define MAX_KEY_LENGTH 512		/**<Maximum length for the key*/
 
+/**
+ * @brief A key/value pair of data
+ */
 typedef struct hashmapnode_s
 {
-	char key[MAX_KEY_LENGTH];
-	void * value;
-	size_t elementSize;
+	char key[MAX_KEY_LENGTH];	/**<The key of the data*/
+	void * value;				/**<Value associated with a key*/
+	size_t elementSize;			/**<Size of the data to hold*/
 }HashmapNode;
 
+/**
+ * @brief An entire collection of key/value pairs
+ */
 typedef struct hashmap_s
 {
-	HashmapNode * map;
-	unsigned int maxNodes;
+	HashmapNode * map;			/**<All of the key/value pairs*/
+	unsigned int maxNodes;		/**<Number of nodes in the hashmap*/
 }Hashmap;
 
 //unsigned long crappy_hash(char * str);
@@ -36,10 +42,34 @@ Hashmap * hashmap_init(unsigned int maxNodes);
  */
 HashmapNode * hashmap_new_node(size_t elementSize);
 
+/**
+ * @brief Inserts a new key/value pair into a hashmap
+ * @param hashbrown The hashmap to insert into
+ * @param key The key of the pair
+ * @param data The value of the pair
+ * @param elementSize The size of the data to hold
+ * @returns 0 if successful; -1 if hashbrown was null; -2 if could not allocate memory for a new node; -3 if hashbrown is full
+ */
 int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t elementSize);
+
+/**
+ * @brief Searches a hashmap for a value from a given key
+ * @param hashbrown The hashmap to search
+ * @param key The key to lookup
+ * @returns The data associated with the key; NULL if key was not found or if hashbrown was NULL
+ */
 void * hashmap_get_data(Hashmap * hashbrown, char * key);
-int hashmap_delete(Hashmap ** hashbrown, char * key);
+
+/**
+ * @brief Removes a key/value pair from the hashmap and returns the value
+ */
+void * hashmap_delete(Hashmap ** hashbrown, char * key);
 int hashmap_clear(Hashmap * hashbrown);
+
+/**
+ * @brief Iterates through a hashmap and prints its valid key/value pairs
+ * @param hashbrown The hashmap to iterate through
+ */
 void hashmap_print(Hashmap * hashbrown);
 
 #endif // !__DS_HASHMAP__
