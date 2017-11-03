@@ -16,6 +16,7 @@ int main(int argc, char * argv[])
 	Sprite *sprite = NULL;
 	char * c = "my string";
 	Hashmap * hashbrown = NULL;
+	int j = 0;
 
 	int mx, my, i;
 	float mf = 0;
@@ -114,7 +115,13 @@ int main(int argc, char * argv[])
 
 	//slog("hash (%i)", crappy_hash(c));
 	hashbrown = hashmap_init(10);
-	hashmap_insert(&hashbrown, "my key", 5, sizeof(int));
+	//hashmap_insert(&hashbrown, "my key", 5, sizeof(int));
+	//hashmap_insert(&hashbrown, "my kye", 9, sizeof(int));
+	for (j = 35; j < 46; j++)
+	{
+		c = (char)j;
+		hashmap_insert(&hashbrown, &c, j, sizeof(int));
+	}
 	hashmap_print(hashbrown);
 	
 	/*main game loop*/

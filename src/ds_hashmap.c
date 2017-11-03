@@ -58,6 +58,7 @@ int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t element
 {
 	unsigned long _key = crappy_hash(key);
 	int index = 0;
+	int _index = 0;
 	HashmapNode * new_node = hashmap_new_node(elementSize);
 
 	if (!hashbrown)
@@ -74,10 +75,37 @@ int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t element
 	strncpy(new_node->key, key, MAX_KEY_LENGTH);
 	new_node->value = data;
 	index = _key % (*hashbrown)->maxNodes;
+	_index = index;
 
 	//if ((*hashbrown)->map[index].key == NULL)
-	if (strncmp("", (*hashbrown)->map[index].key, MAX_KEY_LENGTH) == 0)
+	if (strncmp((*hashbrown)->map[index].key, "", MAX_KEY_LENGTH) == 0)
 	{
+		(*hashbrown)->map[index] = (*new_node);
+	}
+	else if (strncmp((*hashbrown)->map[index].key, key, MAX_KEY_LENGTH) == 0)
+	{
+		slog("Warning: That exact key already exists in the hashmap!");
+	}
+	else
+	{
+		while (strncmp((*hashbrown)->map[index].key, "", MAX_KEY_LENGTH) != 0)
+		{
+			index++;
+			if (_index == index)
+			{
+				slog("Error: hashmap was full");
+				return -3;
+			}
+			else if (index >= (*hashbrown)->maxNodes)
+			{
+				index = 0;
+				if (_index == index)
+				{
+					slog("Error: hashmap was full");
+					return -3;
+				}
+			}
+		}
 		(*hashbrown)->map[index] = (*new_node);
 	}
 
