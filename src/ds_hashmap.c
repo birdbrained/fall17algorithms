@@ -112,6 +112,7 @@ int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t element
 	else if (strncmp((*hashbrown)->map[index].key, key, MAX_KEY_LENGTH) == 0)
 	{
 		slog("Warning: That exact key already exists in the hashmap!");
+		return -3;
 	}
 	else
 	{
@@ -213,19 +214,17 @@ void * hashmap_delete(Hashmap ** hashbrown, char * key)
 	if (strncmp((*hashbrown)->map[index].key, key, MAX_KEY_LENGTH) == 0)
 	{
 		data = (*hashbrown)->map[index].value;
-		memset(&(*hashbrown)->map[index], 0, sizeof(HashmapNode) + (*hashbrown)->map[index].elementSize);
+		//memset(&(*hashbrown)->map[index], 0, sizeof(HashmapNode) + (*hashbrown)->map[index].elementSize);
+		strncpy((*hashbrown)->map[index].key, "", MAX_KEY_LENGTH);
+		(*hashbrown)->map[index].value = NULL;
+		(*hashbrown)->map[index].elementSize = 0;
 	}
 	else
 	{
-		while (strncmp((*hashbrown)->map[index].key, "", MAX_KEY_LENGTH) != 0)
+		index++;
+		while (index != _index)
 		{
-			index++;
-			if (_index == index)
-			{
-				slog("Error: could not find key (%s) in hashmap", key);
-				return NULL;
-			}
-			else if (index >= (*hashbrown)->maxNodes)
+			if (index >= (*hashbrown)->maxNodes)
 			{
 				index = 0;
 				if (_index == index)
@@ -239,9 +238,13 @@ void * hashmap_delete(Hashmap ** hashbrown, char * key)
 				if (strncmp((*hashbrown)->map[index].key, key, MAX_KEY_LENGTH) == 0)
 				{
 					data = (*hashbrown)->map[index].value;
-					memset(&(*hashbrown)->map[index], 0, sizeof(HashmapNode) + (*hashbrown)->map[index].elementSize);
+					//memset(&(*hashbrown)->map[index], 0, sizeof(HashmapNode) + (*hashbrown)->map[index].elementSize);
+					strncpy((*hashbrown)->map[index].key, "", MAX_KEY_LENGTH);
+					(*hashbrown)->map[index].value = NULL;
+					(*hashbrown)->map[index].elementSize = 0;
 					break;
 				}
+				index++;
 			}
 		}
 	}
@@ -309,9 +312,9 @@ void hashmap_print(Hashmap * hashbrown)
 	}
 	for (i = 0; i < hashbrown->maxNodes; i++)
 	{
-		if (strncmp(hashbrown->map[i].key, "", MAX_KEY_LENGTH) != 0)
-		{
+		//if (strncmp(hashbrown->map[i].key, "", MAX_KEY_LENGTH) != 0)
+		//{
 			slog("key: (%s) value: (%d)", hashbrown->map[i].key, hashbrown->map[i].value);
-		}
+		//}
 	}
 }

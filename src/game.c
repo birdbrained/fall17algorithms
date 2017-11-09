@@ -18,6 +18,8 @@ int main(int argc, char * argv[])
 	Hashmap * hashbrown = NULL;
 	void * data;
 	int j = 0;
+	char inputKey[512] = "bleh";
+	int inputInt = 0;
 
 	int mx, my, i;
 	float mf = 0;
@@ -115,19 +117,69 @@ int main(int argc, char * argv[])
 	//*/
 
 	//slog("hash (%i)", crappy_hash(c));
-	hashbrown = hashmap_init(10);
+	hashbrown = hashmap_init(2);
 	/*hashmap_insert(&hashbrown, "my key", 5, sizeof(int));
 	hashmap_insert(&hashbrown, "my keyy", 9, sizeof(int));
 	hashmap_print(hashbrown);
 	hashmap_delete(&hashbrown, "my key");
 	slog("delete pair");
 	hashmap_print(hashbrown);*/
-	for (j = 35; j < 46; j++)
+	/*for (j = 35; j < 46; j++)
 	{
 		c = (char)j;
 		hashmap_insert(&hashbrown, &c, j, sizeof(int));
+	}*/
+
+
+	slog("Enter some key/value pairs (quit 0) to quit");
+	while (1)
+	{
+		scanf("%s %i", inputKey, &inputInt);
+		slog("Entered: %s %i", inputKey, inputInt);
+		if (strncmp("quit", inputKey, 512) == 0)
+			break;
+		slog("Inserting: %s %i", inputKey, inputInt);
+		hashmap_insert(&hashbrown, &inputKey, inputInt, sizeof(int));
 	}
+
 	hashmap_print(hashbrown);
+
+	slog("Enter a key to search for (quit to quit)");
+	while (1)
+	{
+		scanf("%s", inputKey);
+		if (strncmp("quit", inputKey, 512) == 0)
+		{
+			slog("Stopping the search.");
+			break;
+		}
+		slog("Searching for %s...", inputKey);
+		data = hashmap_get_data(hashbrown, inputKey);
+		if (data != NULL)
+			slog("Found data (%i) at key (%s)", (int)data, inputKey);
+		else
+			slog("Could not find key (%s) in hashmap...", inputKey);
+	}
+
+	slog("Enter a key to delete (quit to quit)");
+	while (1)
+	{
+		scanf("%s", inputKey);
+		if (strncmp("quit", inputKey, 512) == 0)
+		{
+			slog("Stopping deletion");
+			break;
+		}
+		slog("Trying to delete key (%s)...", inputKey);
+		data = hashmap_delete(&hashbrown, inputKey);
+		if (data != NULL)
+		{
+			slog("Deleted data (%i) at key (%s)\nThe hashmap now has:\n========================", (int)data, inputKey);
+			hashmap_print(hashbrown);
+		}
+		else
+			slog("Could not find key (%s) in hashmap...", inputKey);
+	}
 	/*c = (char)37;
 	data = hashmap_get_data(hashbrown, &c);
 	if (data != NULL)

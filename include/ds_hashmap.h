@@ -55,7 +55,7 @@ Hashmap * hashmap_rehash(Hashmap * hashbrown);
  * @param key The key of the pair
  * @param data The value of the pair
  * @param elementSize The size of the data to hold
- * @returns 0 if successful; -1 if hashbrown was null; -2 if could not allocate memory for a new node; -3 if hashbrown is full
+ * @returns 0 if successful; -1 if hashbrown was null; -2 if could not allocate memory for a new node; -3 if same exact key already in hashbrown
  */
 int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t elementSize);
 
