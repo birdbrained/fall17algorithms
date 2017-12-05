@@ -14,12 +14,12 @@ int main(int argc, char * argv[])
 	int done = 0;
 	const Uint8 * keys;
 	Sprite *sprite = NULL;
-	char * c = "my string";
-	Hashmap * hashbrown = NULL;
-	void * data;
-	int j = 0;
-	char inputKey[512] = "bleh";
-	int inputInt = 0;
+	//char * c = "my string";
+	//Hashmap * hashbrown = NULL;
+	//void * data;
+	//int j = 0;
+	//char inputKey[512] = "bleh";
+	//int inputInt = 0;
 
 	int mx, my, i;
 	float mf = 0;
@@ -29,10 +29,13 @@ int main(int argc, char * argv[])
 	static Body body[10000];// not a pointer!
 	Shape shape[4];// not a pointer!
 				   /*program initializtion*/
+
+	Hashmap * spaceHashmap = NULL;
+
 	init_logger("gf2d.log");
 	slog("---==== BEGIN ====---");
 	gf2d_graphics_initialize(
-		"gf2d",
+		"stuff keeps colliding",
 		1200,
 		720,
 		1200,
@@ -62,7 +65,7 @@ int main(int argc, char * argv[])
 
 	gf2d_space_add_static_shape(space,gf2d_shape_rect(200,500, 512,32));
 	/* Stress test*/
-	for (i = 0; i < 50;i++)
+	for (i = 0; i < 50; i++)
 	{
 		gf2d_body_set(
 			&body[i],
@@ -113,25 +116,9 @@ int main(int argc, char * argv[])
 	//             NULL,
 	//             NULL);
 	//         gf2d_space_add_body(space,&body[1]);
-
 	//*/
 
-	//slog("hash (%i)", crappy_hash(c));
-	hashbrown = hashmap_init(2);
-	/*hashmap_insert(&hashbrown, "my key", 5, sizeof(int));
-	hashmap_insert(&hashbrown, "my keyy", 9, sizeof(int));
-	hashmap_print(hashbrown);
-	hashmap_delete(&hashbrown, "my key");
-	slog("delete pair");
-	hashmap_print(hashbrown);*/
-	/*for (j = 35; j < 46; j++)
-	{
-		c = (char)j;
-		hashmap_insert(&hashbrown, &c, j, sizeof(int));
-	}*/
-
-
-	slog("Enter some key/value pairs (quit 0) to quit");
+	/*slog("Enter some key/value pairs (quit 0) to quit");
 	while (1)
 	{
 		scanf("%s %i", inputKey, &inputInt);
@@ -179,7 +166,7 @@ int main(int argc, char * argv[])
 		}
 		else
 			slog("Could not find key (%s) in hashmap...", inputKey);
-	}
+	}*/
 	/*c = (char)37;
 	data = hashmap_get_data(hashbrown, &c);
 	if (data != NULL)
@@ -202,9 +189,9 @@ int main(int argc, char * argv[])
 									 // all drawing should happen betweem clear_screen and next_frame
 									 //backgrounds drawn first
 		gf2d_sprite_draw_image(sprite, vector2d(0, 0));
-		//gf2d_space_update(space);
+		gf2d_space_update(space);
 
-		//gf2d_space_draw(space);
+		gf2d_space_draw(space);
 		//UI elements last
 		gf2d_sprite_draw(
 			mouse,
@@ -222,7 +209,7 @@ int main(int argc, char * argv[])
 	}
 
 	gf2d_space_free(space);
-	hashmap_clear(hashbrown);
+	hashmap_clear(spaceHashmap);
 	slog("---==== END ====---");
 	return 0;
 }

@@ -2,7 +2,7 @@
 #include "linkedlist.h"
 #include "simple_logger.h"
 
-LL_Node * linkedlist_new_node()
+LL_Node * linkedlist_new_node(size_t elementSize)
 {
 	LL_Node *node = NULL;
 	node = (LL_Node *)malloc(sizeof(LL_Node));
@@ -15,16 +15,24 @@ LL_Node * linkedlist_new_node()
 	return node;
 }
 
-int linkedlist_insert(LL_Node ** head, void * data)
+int linkedlist_insert(LL_Node ** head, void * data, size_t elementSize)
 {
-	LL_Node *node = linkedlist_new_node();
+	LL_Node *node = linkedlist_new_node(elementSize);
 	if (node == NULL)
 	{
 		return -1;
 	}
-	node->data = data;
-	node->next = (*head);
-	(*head) = node;
+	if ((*head) == NULL)
+	{
+		node->data = data;
+		(*head) = node;
+	}
+	else
+	{
+		node->data = data;
+		node->next = (*head);
+		(*head) = node;
+	}
 	return 0;
 }
 

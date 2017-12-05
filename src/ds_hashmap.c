@@ -276,7 +276,7 @@ int hashmap_clear_node(HashmapNode * node, size_t elementSize)
 	return 0;
 }
 
-int hashmap_clear(Hashmap * hashbrown)
+ int hashmap_clear(Hashmap * hashbrown)
 {
 	int i = 0;
 

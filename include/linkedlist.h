@@ -14,17 +14,19 @@ typedef struct Node_S
 
 /**
  * @brief Allocates memory for a new node
+ * @param elementSize The size of the data to hold
  * @returns A pointer to the newly created node, NULL if not enough memory
  */
-LL_Node * linkedlist_new_node();
+LL_Node * linkedlist_new_node(size_t elementSize);
 
 /**
  * @brief Pushes a new element onto the linked list
  * @param head The current head node
- * @param void pointer to data the node will hold
+ * @param void Pointer to data the node will hold
+ * @param elementSize Size of the data to hold
  * @returns 0 if successful, -1 if memory could not be allocated
  */
-int linkedlist_insert(LL_Node ** head, void * data);
+int linkedlist_insert(LL_Node ** head, void * data, size_t elementSize);
 
 /**
  * @brief Removes a node from the front of the linked list, O(1)
