@@ -7,6 +7,7 @@
 #include "gf2d_draw.h"
 #include "gf2d_collision.h"
 #include "ds_hashmap.h"
+#include "ds_spatial_hash.h"
 
 int main(int argc, char * argv[])
 {
@@ -58,6 +59,8 @@ int main(int argc, char * argv[])
 		1,
 		0.1);
 
+	spaceHashmap = spatial_setup(space->bounds.w, space->bounds.h, 100, sizeof(Body));
+
 	shape[0] = gf2d_shape_circle(0, 0, 5);
 	shape[1] = gf2d_shape_circle(20, 0, 25);
 	shape[2] = gf2d_shape_rect(-32, -32, 64, 64);
@@ -69,6 +72,7 @@ int main(int argc, char * argv[])
 	{
 		gf2d_body_set(
 			&body[i],
+			i,
 			"body",
 			ALL_LAYERS,
 			0,
@@ -84,6 +88,7 @@ int main(int argc, char * argv[])
 			NULL,
 			NULL);
 		gf2d_space_add_body(space, &body[i]);
+		
 	}
 	/* collision test*/
 	//         gf2d_body_set(

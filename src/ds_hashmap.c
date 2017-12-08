@@ -10,6 +10,11 @@ unsigned long crappy_hash(char * str)
 	int i = 0;
 	unsigned long hash = 0;
 
+	if (!str)
+	{
+		str = "0";
+	}
+
 	while (str[i] != '\0')
 	{
 		hash += (int)str[i];
@@ -97,6 +102,10 @@ int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t element
 	{
 		//error slog in hashmap_new_code
 		return -2;
+	}
+	if (!key)
+	{
+		key = "0";
 	}
 
 	strncpy(new_node->key, key, MAX_KEY_LENGTH);

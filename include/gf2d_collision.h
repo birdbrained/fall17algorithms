@@ -11,6 +11,7 @@ typedef struct Collision_S Collision;
 
 typedef struct Body_S
 {
+	int			id;				/**<id used for distingusing different bodies*/
 	TextLine    name;           /**<name for debugging purposes*/
 	int         inactive;       /**<internal use only*/
 	float       gravity;        /**<the factor this body adheres to gravity*/
@@ -74,6 +75,7 @@ void gf2d_body_clear(Body *body);
 */
 void gf2d_body_set(
 	Body *body,
+	int			id,
 	char       *name,
 	Uint32      layer,
 	Uint32      team,

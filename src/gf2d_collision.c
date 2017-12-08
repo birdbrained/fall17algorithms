@@ -10,6 +10,7 @@ void gf2d_body_clear(Body *body)
 
 void gf2d_body_set(
 	Body       *body,
+	int			id,
 	char       *name,
 	Uint32      layer,
 	Uint32      team,
@@ -35,6 +36,7 @@ void gf2d_body_set(
 	body->data = data;
 	body->bodyTouch = bodyTouch;
 	body->worldTouch = worldTouch;
+	body->id = id;
 	gf2d_word_cpy(body->name, name);
 }
 
