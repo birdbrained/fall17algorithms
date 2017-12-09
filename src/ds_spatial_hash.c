@@ -149,6 +149,9 @@ void spatial_update(Space * space, Hashmap ** hashmap)
 
 	numBodies = gf2d_list_get_count(space->bodyList);
 
+	//step 1: clear the hashmap
+	spatial_clear(hashmap);
+
 	for (i = 0; i < numBodies; i++)
 	{
 		body = (Body*)gf2d_list_get_nth(space->bodyList, i);
@@ -156,5 +159,10 @@ void spatial_update(Space * space, Hashmap ** hashmap)
 		{
 			continue;
 		}
+
+		//step 2: rehash all bodies into the hashmap
+		spatial_register_body(hashmap, body);
 	}
+
+	//step 3: test collisions within the hashmap
 }
