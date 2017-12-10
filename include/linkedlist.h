@@ -1,6 +1,8 @@
 #ifndef __LINKEDLIST__
 #define __LINKEDLIST__
 
+#include <stdlib.h>
+
 /**
  * @brief Node_S LL_Node a node of a linked list
  * @param data Void pointer to data the node will hold

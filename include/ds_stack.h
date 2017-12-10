@@ -4,11 +4,14 @@
 #include <stdlib.h>
 #include "simple_logger.h"
 
+/**
+ * @brief A stack: first in, last out
+ */
 typedef struct stacknode_s
 {
-	void * data;
-	struct stacknode_s * next;
-	size_t elementSize;
+	void * data;				/**<The data held by the node*/
+	struct stacknode_s * next;	/**<Pointer to next node in the stack*/
+	size_t elementSize;			/**<The size of the data to hold*/
 }Stack;
 
 /**

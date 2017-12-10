@@ -8,6 +8,7 @@
 #include "gf2d_collision.h"
 #include "ds_hashmap.h"
 #include "ds_spatial_hash.h"
+#include "topo_sort.h"
 
 int main(int argc, char * argv[])
 {
@@ -32,6 +33,7 @@ int main(int argc, char * argv[])
 				   /*program initializtion*/
 
 	Hashmap * spaceHashmap = NULL;
+	VertGraph * vertGraph = vert_graph_init(6);
 
 	init_logger("gf2d.log");
 	slog("---==== BEGIN ====---");
@@ -60,6 +62,15 @@ int main(int argc, char * argv[])
 		0.1);
 
 	spaceHashmap = spatial_setup(space->bounds.w, space->bounds.h, 100, sizeof(Body));
+
+	vert_graph_add_edge(&vertGraph, 5, 2);
+	vert_graph_add_edge(&vertGraph, 5, 0);
+	vert_graph_add_edge(&vertGraph, 4, 0);
+	vert_graph_add_edge(&vertGraph, 4, 1);
+	vert_graph_add_edge(&vertGraph, 2, 3);
+	vert_graph_add_edge(&vertGraph, 3, 1);
+
+	topo_sort(vertGraph);
 
 	shape[0] = gf2d_shape_circle(0, 0, 5);
 	shape[1] = gf2d_shape_circle(20, 0, 25);
