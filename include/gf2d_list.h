@@ -79,6 +79,14 @@ List *gf2d_list_delete_nth(List *list, Uint32 n);
 List *gf2d_list_delete_data(List *list, void *data);
 
 /**
+* @brief finds the first element in the list that matches the input data
+* @param list the list to search for the element
+* @param data the data to search for in the list
+* @returns NULL if could not find data. param data if data was found
+*/
+void *gf2d_list_find_data(List *list, void *data);
+
+/**
 * @brief get the number of tracked elements in the list
 * @param list the list the check
 * @return the count in the list.  Will be zero if list was NULL

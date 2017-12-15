@@ -31,6 +31,8 @@ int main(int argc, char * argv[])
 	static Body body[10000];// not a pointer!
 	Shape shape[4];// not a pointer!
 				   /*program initializtion*/
+	List * spaceArray[100];
+	int setter = 0;
 
 	Hashmap * spaceHashmap = NULL;
 	VertGraph * vertGraph = vert_graph_init(6);
@@ -62,15 +64,19 @@ int main(int argc, char * argv[])
 		0.1);
 
 	spaceHashmap = spatial_setup(space->bounds.w, space->bounds.h, 100, sizeof(Body));
+	for (setter = 0; setter < 100; setter++)
+	{
+		spaceArray[setter] = gf2d_list_new();
+	}
 
-	vert_graph_add_edge(&vertGraph, 5, 2);
+	/*vert_graph_add_edge(&vertGraph, 5, 2);
 	vert_graph_add_edge(&vertGraph, 5, 0);
 	vert_graph_add_edge(&vertGraph, 4, 0);
 	vert_graph_add_edge(&vertGraph, 4, 1);
 	vert_graph_add_edge(&vertGraph, 2, 3);
 	vert_graph_add_edge(&vertGraph, 3, 1);
 
-	topo_sort(vertGraph);
+	topo_sort(vertGraph);*/
 
 	shape[0] = gf2d_shape_circle(0, 0, 5);
 	shape[1] = gf2d_shape_circle(20, 0, 25);
@@ -99,7 +105,8 @@ int main(int argc, char * argv[])
 			NULL,
 			NULL);
 		gf2d_space_add_body(space, &body[i]);
-		
+		//spatial_register_body(&spaceHashmap, &body[i]);
+		spatial_register_body(&spaceArray, &body[i]);
 	}
 	/* collision test*/
 	//         gf2d_body_set(
@@ -190,6 +197,9 @@ int main(int argc, char * argv[])
 	else
 		slog("bad key");*/
 	
+	slog("done creating shapes");
+	//hashmap_print(spaceHashmap);
+
 	/*main game loop*/
 	while (!done)
 	{
@@ -205,6 +215,9 @@ int main(int argc, char * argv[])
 									 // all drawing should happen betweem clear_screen and next_frame
 									 //backgrounds drawn first
 		gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+		//spatial_update(space, &spaceHashmap, space->bounds.w, space->bounds.h, 100, sizeof(Body));
+		spatial_update(space, spaceArray);
 		gf2d_space_update(space);
 
 		gf2d_space_draw(space);

@@ -5,7 +5,7 @@
 #include <string.h>
 #include "simple_logger.h"
 
-#define MAX_KEY_LENGTH 512		/**<Maximum length for the key*/
+#define MAX_KEY_LENGTH 32		/**<Maximum length for the key*/
 
 /**
  * @brief A key/value pair of data

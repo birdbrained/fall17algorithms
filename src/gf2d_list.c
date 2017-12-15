@@ -154,6 +154,24 @@ List *gf2d_list_delete_data(List *list, void *data)
 	return list;
 }
 
+void *gf2d_list_find_data(List *list, void *data)
+{
+	int i;
+	if (!list)
+	{
+		slog("no list provided");
+		return NULL;
+	}
+	for (i = 0; i < list->count;i++)
+	{
+		if (list->elements[i].data == data)
+		{
+			return data;
+		}
+	}
+	return NULL;
+}
+
 List *gf2d_list_delete_nth(List *list, Uint32 n)
 {
 	if (!list)

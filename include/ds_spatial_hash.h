@@ -7,6 +7,7 @@
 #include "simple_logger.h"
 #include "ds_hashmap.h"
 #include "linkedlist.h"
+#include "gf2d_list.h"
 #include "gf2d_vector.h"
 #include "gf2d_collision.h"
 
@@ -31,14 +32,15 @@ void spatial_clear(Hashmap ** hash);
  * @param hashmap The hashmap to add the body to
  * @param body The body is register
  */
-void spatial_register_body(Hashmap ** hashmap, Body * body);
+List * spatial_register_body(/*Hashmap ** hashmap*/List * spaceArray[], Body * body);
+//void spatial_register_body(Hashmap ** hashmap, Body * body);
 
 /**
  * @brief Does the determining for spatial_register_body
  * @param body The body to lookup
  * @returns A linked list of all of the buckets the body is in
  */
-LL_Node * spatial_body_in_buckets(Body * body);
+List * spatial_body_in_buckets(Body * body);
 
 /**
  * @brief Adds the "buckets" into the spatial hash (areas to break collisions down into)
@@ -46,14 +48,15 @@ LL_Node * spatial_body_in_buckets(Body * body);
  * @param width The number of cells/buckets in one row
  * @param bucket The list of cell numbers a body is in, will get stuff added to it
  */
-void spatial_add_buckets(Vector2D position, float width, /*Uint8 bodyID,*/ LL_Node ** bucket);
+void spatial_add_buckets(Vector2D position, float width, /*Uint8 bodyID,*/ List ** bucket);
 
 /**
  * @brief Updates the spatial hash based on what is currently in the space
  * @param The space that holds all of the bodies to check
  * @param hashmap The spatial hashmap to update
  */
-void spatial_update(Space * space, Hashmap ** hashmap);
+List * spatial_update(Space * space, /*Hashmap ** hashmap*/List * spaceArray[]/*, int spaceWidth, int spaceHeight, int cellSize, size_t elementSize*/);
+//void spatial_update(Space * space, Hashmap ** hashmap, int spaceWidth, int spaceHeight, int cellSize, size_t elementSize);
 
 #endif // !__DS_SPATIAL_HASH__
 

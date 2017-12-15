@@ -120,7 +120,7 @@ int hashmap_insert(Hashmap ** hashbrown, char * key, void * data, size_t element
 	}
 	else if (strncmp((*hashbrown)->map[index].key, key, MAX_KEY_LENGTH) == 0)
 	{
-		slog("Warning: That exact key already exists in the hashmap!");
+		//slog("Warning: That exact key already exists in the hashmap!");
 		return -3;
 	}
 	else
@@ -169,6 +169,7 @@ void * hashmap_get_data(Hashmap * hashbrown, char * key)
 	index = _key % hashbrown->maxNodes;
 	_index = index;
 
+	if (&hashbrown->map[index] != NULL)
 	if (strncmp(hashbrown->map[index].key, key, MAX_KEY_LENGTH) == 0)
 	{
 		data = hashbrown->map[index].value;
@@ -297,16 +298,17 @@ int hashmap_clear_node(HashmapNode * node, size_t elementSize)
 
 	for (i = 0; i < hashbrown->maxNodes; i++)
 	{
-		if (strncmp(hashbrown->map[i].key, "", MAX_KEY_LENGTH) != 0)
-		{
+		//slog("i (%i) key (%s)", i, hashbrown->map[i].key);
+		//if (strncmp(hashbrown->map[i].key, "", MAX_KEY_LENGTH) != 0)
+		//{
 			strncpy(hashbrown->map[i].key, "", MAX_KEY_LENGTH);
 			hashbrown->map[i].value = NULL;
-			hashbrown->map[i].elementSize = NULL;
+			hashbrown->map[i].elementSize = 0;
 			hashmap_clear_node(&hashbrown->map[i], hashbrown->map[i].elementSize);
-		}
+		//}
 	}
 	
-	//memset(hashbrown, 0, sizeof(Hashmap));
+	memset(hashbrown, 0, sizeof(Hashmap));
 	free(hashbrown);
 	return 0;
 }
