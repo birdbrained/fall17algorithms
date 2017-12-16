@@ -83,9 +83,9 @@ int main(int argc, char * argv[])
 	shape[2] = gf2d_shape_rect(-32, -32, 64, 64);
 	shape[3] = gf2d_shape_rect(-16, -16, 32, 32);
 
-	gf2d_space_add_static_shape(space,gf2d_shape_rect(200,500, 512,32));
+	//gf2d_space_add_static_shape(space,gf2d_shape_rect(200,500, 512,32));
 	/* Stress test*/
-	for (i = 0; i < 50; i++)
+	for (i = 0; i < 100; i++)
 	{
 		gf2d_body_set(
 			&body[i],
@@ -218,7 +218,7 @@ int main(int argc, char * argv[])
 
 		//spatial_update(space, &spaceHashmap, space->bounds.w, space->bounds.h, 100, sizeof(Body));
 		spatial_update(space, spaceArray);
-		gf2d_space_update(space);
+		gf2d_space_update(space, spaceArray);
 
 		gf2d_space_draw(space);
 		//UI elements last
@@ -234,7 +234,7 @@ int main(int argc, char * argv[])
 		gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 
 		if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
-		//slog("Rendering at %f FPS", gf2d_graphics_get_frames_per_second());
+		slog("Rendering at %f FPS", gf2d_graphics_get_frames_per_second());
 	}
 
 	gf2d_space_free(space);

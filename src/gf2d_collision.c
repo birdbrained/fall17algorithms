@@ -407,9 +407,10 @@ void gf2d_body_post_step(Body *body, Space *space)
 	vector2d_copy(body->velocity, body->newvelocity);
 }
 
-void gf2d_body_step(Body *body, Space *space, float step)
+void gf2d_body_step(Body *body, Space *space, float step, List * spaceArray[])
 {
 	int i = 0;
+	int j = 0;
 	int attempts = 0;
 	int collided = 0;
 	Collision collision;
@@ -418,7 +419,7 @@ void gf2d_body_step(Body *body, Space *space, float step)
 	Vector2D pocS, normalS;
 	Body *other, *collider = NULL;
 	Shape *shape, *collisionShape = NULL;
-	int bodies, staticShapes;
+	int bodies, staticShapes, bodiesInSection;
 	Vector2D velocity;
 	if (!body)return;
 	if (!space)return;
@@ -445,19 +446,23 @@ void gf2d_body_step(Body *body, Space *space, float step)
 		}
 		//body/body collision check
 
-		// based on "body" generate a list of bodies of potential conflict based on your algorith of choice
-		for (i = 0; i < bodies; i++)
+		// based on "body" generate a list of bodies of potential conflict based on your algorithm of choice
+		for (i = 0; i < 84; i++)
 		{
-			other = (Body*)gf2d_list_get_nth(space->bodyList, i); // use your list instead of the space body list here
-			if ((!other) ||// error check
-				(other == body))continue;//dont self collide
-			if (!(other->layer & body->layer))continue;// only we share a layer
-			if ((body->team) && (other->team == body->team))// no friendly fire
-				continue;
-			if (gf2d_body_collide(body, other, &poc, &normal))
+			bodiesInSection = gf2d_list_get_count(spaceArray[i]);
+			for (j = 0; j < bodiesInSection; j++)
 			{
-				collider = other;
-				goto attempt;
+				other = (Body*)gf2d_list_get_nth(spaceArray[i], j); // use your list instead of the space body list here
+				if ((!other) ||// error check
+					(other == body))continue;//dont self collide
+				if (!(other->layer & body->layer))continue;// only we share a layer
+				if ((body->team) && (other->team == body->team))// no friendly fire
+					continue;
+				if (gf2d_body_collide(body, other, &poc, &normal))
+				{
+					collider = other;
+					goto attempt;
+				}
 			}
 		}
 		for (i = 0; i < staticShapes; i++)
@@ -526,7 +531,7 @@ void gf2d_body_step(Body *body, Space *space, float step)
 	}
 }
 
-void gf2d_space_step(Space *space, float t)
+void gf2d_space_step(Space *space, float t, List * spaceArray[])
 {
 	int i = 0;
 	Body *body;
@@ -554,7 +559,7 @@ void gf2d_space_step(Space *space, float t)
 												 //         {
 												 //                 slog("updating player body");
 												 //         }
-		gf2d_body_step(body, space, t);
+		gf2d_body_step(body, space, t, spaceArray);
 	}
 	for (i = 0; i < bodies; i++)
 	{
@@ -564,7 +569,7 @@ void gf2d_space_step(Space *space, float t)
 	}
 }
 
-void gf2d_space_update(Space *space)
+void gf2d_space_update(Space *space, List * spaceArray[])
 {
 	int i;
 	float s;
@@ -581,7 +586,7 @@ void gf2d_space_update(Space *space)
 	}
 	for (s = 0; s < 1; s += space->timeStep)
 	{
-		gf2d_space_step(space, s);
+		gf2d_space_step(space, s, spaceArray);
 	}
 }
 

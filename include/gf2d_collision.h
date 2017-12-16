@@ -158,7 +158,7 @@ void gf2d_space_add_static_shape(Space *space, Shape shape);
 * @brief update the bodies in the physics space for one time slice
 * @param space the space to be updated
 */
-void gf2d_space_update(Space *space);
+void gf2d_space_update(Space *space, List * spaceArray[]);
 
 /**
 * @brief check if a shape intersects with any body or shape within the space
