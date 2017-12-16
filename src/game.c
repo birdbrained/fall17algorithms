@@ -8,7 +8,7 @@
 #include "gf2d_collision.h"
 #include "ds_hashmap.h"
 #include "ds_spatial_hash.h"
-#include "topo_sort.h"
+#include "ds_adj_graph.h"
 
 int main(int argc, char * argv[])
 {
@@ -35,7 +35,7 @@ int main(int argc, char * argv[])
 	int setter = 0;
 
 	Hashmap * spaceHashmap = NULL;
-	VertGraph * vertGraph = vert_graph_init(6);
+	AdjGraph * graph = adjgraph_new(6);
 
 	init_logger("gf2d.log");
 	slog("---==== BEGIN ====---");
@@ -63,20 +63,19 @@ int main(int argc, char * argv[])
 		1,
 		0.1);
 
-	spaceHashmap = spatial_setup(space->bounds.w, space->bounds.h, 100, sizeof(Body));
+	/*spaceHashmap = spatial_setup(space->bounds.w, space->bounds.h, 100, sizeof(Body));
 	for (setter = 0; setter < 100; setter++)
 	{
 		spaceArray[setter] = gf2d_list_new();
-	}
-
-	/*vert_graph_add_edge(&vertGraph, 5, 2);
-	vert_graph_add_edge(&vertGraph, 5, 0);
-	vert_graph_add_edge(&vertGraph, 4, 0);
-	vert_graph_add_edge(&vertGraph, 4, 1);
-	vert_graph_add_edge(&vertGraph, 2, 3);
-	vert_graph_add_edge(&vertGraph, 3, 1);
-
-	topo_sort(vertGraph);*/
+	}*/
+	graph = adjgraph_add_edge(graph, 0, 1);
+	graph = adjgraph_add_edge(graph, 0, 4);
+	graph = adjgraph_add_edge(graph, 1, 2);
+	graph = adjgraph_add_edge(graph, 1, 3);
+	graph = adjgraph_add_edge(graph, 1, 4);
+	graph = adjgraph_add_edge(graph, 2, 3);
+	graph = adjgraph_add_edge(graph, 3, 4);
+	adjgraph_print(graph);
 
 	shape[0] = gf2d_shape_circle(0, 0, 5);
 	shape[1] = gf2d_shape_circle(20, 0, 25);
@@ -85,7 +84,7 @@ int main(int argc, char * argv[])
 
 	//gf2d_space_add_static_shape(space,gf2d_shape_rect(200,500, 512,32));
 	/* Stress test*/
-	for (i = 0; i < 75; i++)
+	/*for (i = 0; i < 75; i++)
 	{
 		gf2d_body_set(
 			&body[i],
@@ -107,7 +106,7 @@ int main(int argc, char * argv[])
 		gf2d_space_add_body(space, &body[i]);
 		//spatial_register_body(&spaceHashmap, &body[i]);
 		spatial_register_body(&spaceArray, &body[i]);
-	}
+	}*/
 	/* collision test*/
 	//         gf2d_body_set(
 	//             &body[0],
@@ -217,10 +216,10 @@ int main(int argc, char * argv[])
 		gf2d_sprite_draw_image(sprite, vector2d(0, 0));
 
 		//spatial_update(space, &spaceHashmap, space->bounds.w, space->bounds.h, 100, sizeof(Body));
-		spatial_update(space, spaceArray);
-		gf2d_space_update(space, spaceArray);
+		//spatial_update(space, spaceArray);
+		//gf2d_space_update(space, spaceArray);
 
-		gf2d_space_draw(space);
+		//gf2d_space_draw(space);
 		//UI elements last
 		gf2d_sprite_draw(
 			mouse,
@@ -234,7 +233,7 @@ int main(int argc, char * argv[])
 		gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 
 		if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
-		slog("Rendering at %f FPS", gf2d_graphics_get_frames_per_second());
+		//slog("Rendering at %f FPS", gf2d_graphics_get_frames_per_second());
 	}
 
 	gf2d_space_free(space);

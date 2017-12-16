@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\dj_tilemap.c" />
+    <ClCompile Include="..\..\src\ds_adj_graph.c" />
     <ClCompile Include="..\..\src\ds_binary_tree.c" />
     <ClCompile Include="..\..\src\ds_graph.c" />
     <ClCompile Include="..\..\src\ds_hashmap.c" />
@@ -105,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\dj_tilemap.h" />
+    <ClInclude Include="..\..\include\ds_adj_graph.h" />
     <ClInclude Include="..\..\include\ds_binary_tree.h" />
     <ClInclude Include="..\..\include\ds_graph.h" />
     <ClInclude Include="..\..\include\ds_hashmap.h" />
