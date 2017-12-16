@@ -97,3 +97,65 @@ void adjgraph_print(AdjGraph * graph)
 		printf("\n");
 	}
 }
+
+void adjgraph_topological_sort_recurse(AdjGraph * graph, int vert, int visited[], Stack ** stack)
+{
+	AdjNode * iterator = NULL;
+
+	visited[vert] = 1;
+	iterator = graph->adjacencyList[vert].head;
+	while (iterator != NULL)
+	{
+		if (!visited[iterator->destination])
+		{
+			adjgraph_topological_sort_recurse(graph, iterator->destination, visited, stack);
+		}
+		iterator = iterator->next;
+	}
+
+	stack_push(stack, vert, sizeof(int));
+}
+
+void adjgraph_topological_sort(AdjGraph * graph)
+{
+	Stack * s = NULL;
+	int * visited = NULL;
+	int i = 0;
+
+	if (!graph)
+	{
+		slog("Error: cannot do a topological sort of a null graph!");
+		return;
+	}
+
+	s = stack_init(sizeof(int));
+	if (!s)
+	{
+		//slog in stack_init
+		return;
+	}
+
+	visited = (int *)malloc(sizeof(int) * graph->numVertices);
+	if (!visited)
+	{
+		slog("Error: could not allocate memory for an array to complete a topo sort!");
+		free(s);
+		return;
+	}
+	memset(visited, 0, sizeof(int) * graph->numVertices);
+
+	for (i = 0; i < graph->numVertices; i++)
+	{
+		if (!visited[i])
+		{
+			adjgraph_topological_sort_recurse(graph, i, visited, &s);
+		}
+	}
+
+	slog("\n\nTopological sort:\n==================================");
+	while (s->next != NULL)
+	{
+		printf("%d ", (int)stack_pop(&s));
+	}
+	printf("\n\n");
+}

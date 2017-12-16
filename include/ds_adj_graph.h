@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "simple_logger.h"
+#include "ds_stack.h"
 
 /**
  * @brief One single node of a graph
@@ -59,6 +60,12 @@ AdjGraph * adjgraph_add_edge(AdjGraph * graph, int src, int dest);
  * @param graph The graph to print
  */
 void adjgraph_print(AdjGraph * graph);
+
+/**
+ * @brief Attempts to perform a topological sort of a certain graph
+ * @param graph The graph to extract a sort from
+ */
+void adjgraph_topological_sort(AdjGraph * graph);
 
 #endif // !__DS_ADJ_GRAPH__
 
