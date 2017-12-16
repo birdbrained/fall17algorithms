@@ -55,7 +55,7 @@ int main(int argc, char * argv[])
 	/*demo setup*/
 	sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
 	mouse = gf2d_sprite_load_all("images/pointer.png", 32, 32, 16);
-	diagram = gf2d_sprite_load_image("images/diagram.PNG");
+	diagram = gf2d_sprite_load_image("images/diagram.png");
 
 	space = gf2d_space_new_full(
 		3,
